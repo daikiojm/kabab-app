@@ -1,4 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native'
+import 'react-native-gesture-handler'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import { HomeScreen } from './src/screens/HomeScreen'
@@ -10,19 +12,21 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: '#fff' },
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="History" component={HistoryScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <StatusBar style="auto" />
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: '#fff' },
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   )
 }
