@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../types/navigation'
-import { BottomNavigation } from '../components/BottomNavigation'
 
 export const SettingsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
@@ -38,25 +37,18 @@ export const SettingsScreen = () => {
             <Text style={styles.sectionTitle}>通知</Text>
             <View style={styles.settingItem}>
               <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
-              <Switch
-                value={notificationsEnabled}
-                onValueChange={setNotificationsEnabled}
-              />
+              <Switch value={notificationsEnabled} onValueChange={setNotificationsEnabled} />
             </View>
           </View>
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>データ管理</Text>
-            <TouchableOpacity
-              style={styles.dangerButton}
-              onPress={handleResetHistory}
-            >
+            <TouchableOpacity style={styles.dangerButton} onPress={handleResetHistory}>
               <Text style={styles.dangerButtonText}>履歴をリセット</Text>
             </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>
-      <BottomNavigation />
     </>
   )
 }

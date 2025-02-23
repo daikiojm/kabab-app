@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar'
 import { HomeScreen } from './src/screens/HomeScreen'
 import { HistoryScreen } from './src/screens/HistoryScreen'
 import { SettingsScreen } from './src/screens/SettingsScreen'
+import { NotificationScreen } from './src/screens/NotificationScreen'
 import { RootStackParamList } from './src/types/navigation'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -26,6 +27,7 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="History" component={HistoryScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Notification" component={NotificationScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

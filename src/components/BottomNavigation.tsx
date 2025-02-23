@@ -26,14 +26,6 @@ export const BottomNavigation = () => {
         <Text style={[styles.icon, isActive('History') && styles.activeIcon]}>📅</Text>
         <Text style={[styles.label, isActive('History') && styles.activeLabel]}>履歴</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.tab}
-        onPress={() => navigation.navigate('Settings')}
-      >
-        <Text style={[styles.icon, isActive('Settings') && styles.activeIcon]}>⚙️</Text>
-        <Text style={[styles.label, isActive('Settings') && styles.activeLabel]}>設定</Text>
-      </TouchableOpacity>
     </View>
   )
 }

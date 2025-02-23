@@ -36,8 +36,24 @@ export const HomeScreen = () => {
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.content}>
-            <Text style={styles.title}>🥙 ケバブ記録</Text>
-            <Text style={styles.subtitle}>今日のケバブを記録しましょう</Text>
+            <View style={styles.header}>
+              <TouchableOpacity
+                style={styles.headerIcon}
+                onPress={() => navigation.navigate('Settings')}
+              >
+                <Text style={styles.iconText}>⚙️</Text>
+              </TouchableOpacity>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>🥙 ケバブ記録</Text>
+                <Text style={styles.subtitle}>今日のケバブを記録しましょう</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.headerIcon}
+                onPress={() => navigation.navigate('Notification')}
+              >
+                <Text style={styles.iconText}>🔔</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.dashboardContainer}>
               <Card containerStyle={styles.dashboardCard}>
                 <View style={styles.cardContent}>
@@ -110,8 +126,27 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 72,
+    paddingTop: 16,
     paddingBottom: 24,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 16,
+    marginBottom: 24,
+  },
+  headerIcon: {
+    padding: 8,
+  },
+  iconText: {
+    fontSize: 24,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    flex: 1,
+    paddingHorizontal: 16,
   },
   dashboardContainer: {
     width: '100%',
