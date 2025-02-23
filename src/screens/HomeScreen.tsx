@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   Platform,
   Pressable,
+  ScrollView,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { Card } from '@rneui/themed'
 import { RootStackNavigationProp } from '../types/navigation'
 import { BottomNavigation } from '../components/BottomNavigation'
 import { RecordForm } from '../components/RecordForm'
@@ -32,13 +34,37 @@ export const HomeScreen = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>🥙 ケバブ記録</Text>
-          <Text style={styles.subtitle}>今日のケバブを記録しましょう</Text>
-          <TouchableOpacity style={styles.recordButton} onPress={handleOpenPress}>
-            <Text style={styles.recordButtonText}>記録する</Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.content}>
+            <Text style={styles.title}>🥙 ケバブ記録</Text>
+            <Text style={styles.subtitle}>今日のケバブを記録しましょう</Text>
+            <View style={styles.dashboardContainer}>
+              <Card containerStyle={styles.dashboardCard}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>🔥 連続ケバブ日数</Text>
+                  <Text style={styles.cardValue}>7日</Text>
+                </View>
+              </Card>
+              <Card containerStyle={styles.dashboardCard}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>📊 累積ケバブ数</Text>
+                  <Text style={styles.cardValue}>42個</Text>
+                </View>
+              </Card>
+              <Card containerStyle={styles.dashboardCard}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle}>💡 ケバブ豆知識</Text>
+                  <Text style={styles.cardDescription}>
+                    ケバブの「ケバブ」はトルコ語で「焼き肉」を意味します
+                  </Text>
+                </View>
+              </Card>
+            </View>
+            <TouchableOpacity style={styles.recordButton} onPress={handleOpenPress}>
+              <Text style={styles.recordButtonText}>記録する</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </SafeAreaView>
       <BottomNavigation />
 
@@ -69,6 +95,10 @@ export const HomeScreen = () => {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   bottomSheet: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -80,7 +110,45 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 80,
+    paddingTop: 24,
+    paddingBottom: 24,
+  },
+  dashboardContainer: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginBottom: 32,
+  },
+  dashboardCard: {
+    borderRadius: 12,
+    marginBottom: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    padding: 16,
+  },
+  cardContent: {
+    alignItems: 'flex-start',
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#333',
+  },
+  cardValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FF5722',
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
   },
   title: {
     fontSize: 24,
