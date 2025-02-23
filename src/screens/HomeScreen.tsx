@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 40,
+    paddingTop: 80,
   },
   title: {
     fontSize: 24,
