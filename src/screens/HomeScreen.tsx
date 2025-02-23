@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 24,
+    paddingTop: 72,
     paddingBottom: 24,
   },
   dashboardContainer: {
