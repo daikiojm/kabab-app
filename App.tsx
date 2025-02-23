@@ -1,5 +1,6 @@
-import { NavigationContainer } from '@react-navigation/native'
 import 'react-native-gesture-handler'
+import 'react-native-reanimated'
+import { NavigationContainer } from '@react-navigation/native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'

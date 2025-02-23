@@ -9,7 +9,7 @@ import {
   Pressable,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps } from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { RootStackNavigationProp } from '../types/navigation'
 import { BottomNavigation } from '../components/BottomNavigation'
 import { RecordForm } from '../components/RecordForm'
@@ -19,12 +19,14 @@ export const HomeScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['50%', '90%'], [])
 
-  const handleOpenPress = useCallback(() => {
-    bottomSheetRef.current?.snapToIndex(0)
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index)
   }, [])
 
-  const handleDismiss = useCallback(() => {
-    bottomSheetRef.current?.close()
+  const handleOpenPress = useCallback(() => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.snapToIndex(0)
+    }
   }, [])
 
   return (
@@ -44,25 +46,23 @@ export const HomeScreen = () => {
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
+        enableContentPanningGesture
+        enableOverDrag
         enablePanDownToClose
         handleIndicatorStyle={styles.handleIndicator}
         backgroundStyle={styles.bottomSheetBackground}
-        android_keyboardInputMode="adjustResize"
-        backdropComponent={useCallback(
-          (props: BottomSheetBackdropProps) => (
-            <BottomSheetBackdrop
-              {...props}
-              appearsOnIndex={0}
-              disappearsOnIndex={-1}
-              pressBehavior="close"
-            />
-          ),
-          []
+        onChange={handleSheetChanges}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            disappearsOnIndex={-1}
+            appearsOnIndex={0}
+          />
         )}
       >
-        <View style={styles.bottomSheetContent}>
+        <BottomSheetView style={styles.contentContainer}>
           <RecordForm />
-        </View>
+        </BottomSheetView>
       </BottomSheet>
     </>
   )
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
   bottomSheetBackground: {
     backgroundColor: '#fff',
   },
-  bottomSheetContent: {
+  contentContainer: {
     flex: 1,
-    paddingBottom: Platform.OS === 'ios' ? 34 : 24,
+    padding: 24,
   },
 })
