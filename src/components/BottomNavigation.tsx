@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../types/navigation'
 
@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingBottom: 20,
-    paddingTop: 10,
+    height: 80,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
+    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
   },
   tab: {
     alignItems: 'center',

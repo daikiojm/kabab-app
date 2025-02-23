@@ -29,33 +29,35 @@ export const SettingsScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>⚙️ 設定</Text>
+    <>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.title}>⚙️ 設定</Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>通知</Text>
-          <View style={styles.settingItem}>
-            <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
-            <Switch
-              value={notificationsEnabled}
-              onValueChange={setNotificationsEnabled}
-            />
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>通知</Text>
+            <View style={styles.settingItem}>
+              <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
+              <Switch
+                value={notificationsEnabled}
+                onValueChange={setNotificationsEnabled}
+              />
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>データ管理</Text>
+            <TouchableOpacity
+              style={styles.dangerButton}
+              onPress={handleResetHistory}
+            >
+              <Text style={styles.dangerButtonText}>履歴をリセット</Text>
+            </TouchableOpacity>
           </View>
         </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>データ管理</Text>
-          <TouchableOpacity
-            style={styles.dangerButton}
-            onPress={handleResetHistory}
-          >
-            <Text style={styles.dangerButtonText}>履歴をリセット</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </SafeAreaView>
       <BottomNavigation />
-    </SafeAreaView>
+    </>
   )
 }
 

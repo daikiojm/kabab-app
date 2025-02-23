@@ -39,8 +39,8 @@ export const HomeScreen = () => {
             <Text style={styles.recordButtonText}>記録する</Text>
           </TouchableOpacity>
         </View>
-        <BottomNavigation />
       </SafeAreaView>
+      <BottomNavigation />
 
       <BottomSheet
         ref={bottomSheetRef}

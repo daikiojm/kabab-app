@@ -8,24 +8,26 @@ export const HistoryScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.header}>
-          <Text style={styles.title}>📅 ケバブ履歴</Text>
-        </View>
-
-        {/* 月別グループの例 */}
-        <View style={styles.monthGroup}>
-          <Text style={styles.monthTitle}>2025年2月</Text>
-          <View style={styles.historyItem}>
-            <Text style={styles.date}>2月22日</Text>
-            <Text style={styles.kebabInfo}>🥙 ドネルケバブ</Text>
-            <Text style={styles.time}>18:30</Text>
+    <>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.header}>
+            <Text style={styles.title}>📅 ケバブ履歴</Text>
           </View>
-        </View>
-      </ScrollView>
+
+          {/* 月別グループの例 */}
+          <View style={styles.monthGroup}>
+            <Text style={styles.monthTitle}>2025年2月</Text>
+            <View style={styles.historyItem}>
+              <Text style={styles.date}>2月22日</Text>
+              <Text style={styles.kebabInfo}>🥙 ドネルケバブ</Text>
+              <Text style={styles.time}>18:30</Text>
+            </View>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
       <BottomNavigation />
-    </SafeAreaView>
+    </>
   )
 }
 
