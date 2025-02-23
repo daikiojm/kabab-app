@@ -2,6 +2,32 @@
 
 ケバブ愛好家のための記録アプリケーション 🥙
 
+## 開発環境のセットアップ
+
+1. 必要な依存関係をインストール
+
+```bash
+npm install
+```
+
+2. iOSシミュレータで実行
+
+```bash
+npm run ios
+```
+
+3. Androidエミュレータで実行
+
+```bash
+npm run android
+```
+
+4. Web版で実行
+
+```bash
+npm run web
+```
+
 ## アプリケーション利用者のペルソナ
 
 - 毎日ケバブを食べる日本人成人男性。独身 30 代一人暮らし
@@ -60,32 +86,6 @@
 - コミットメッセージは Conventional Commits に従うこと
   - https://www.conventionalcommits.org/ja/v1.0.0/
 - ライブラリ追加を伴う修正をする際には必ずラリブラリの開発元ページを確認してメンテナンス状況をチェックすること
-
-## 開発環境のセットアップ
-
-1. 必要な依存関係をインストール
-
-```bash
-npm install
-```
-
-2. iOSシミュレータで実行
-
-```bash
-npm run ios
-```
-
-3. Androidエミュレータで実行
-
-```bash
-npm run android
-```
-
-4. Web版で実行
-
-```bash
-npm run web
-```
 
 ## 開発ステータス
 
