@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { RootStackNavigationProp } from '../types/navigation';
 
 type NotificationItem = {
   id: string;
@@ -28,9 +31,10 @@ const mockNotifications: NotificationItem[] = [
 ];
 
 export const NotificationScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const renderItem = ({ item }: { item: NotificationItem }) => (
     <View style={styles.notificationItem}>
-      <View style={styles.header}>
+      <View style={styles.itemHeader}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.date}>{item.createdAt}</Text>
       </View>
@@ -40,8 +44,11 @@ export const NotificationScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View style={styles.header}>
+        <HeaderBackButton onPress={() => navigation.goBack()} />
         <Text style={styles.screenTitle}>🔔 通知</Text>
+      </View>
+      <View style={styles.content}>
         <FlatList
           data={mockNotifications}
           renderItem={renderItem}
@@ -54,19 +61,23 @@ export const NotificationScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingHorizontal: 8,
+  },
   content: {
     flex: 1,
-    paddingTop: 40,
   },
   screenTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 24,
-    paddingHorizontal: 16,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    marginLeft: 8,
   },
   listContainer: {
     padding: 16,
@@ -77,7 +88,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
   },
-  header: {
+  itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,

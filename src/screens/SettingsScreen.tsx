@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { HeaderBackButton } from '@react-navigation/elements'
 import { RootStackNavigationProp } from '../types/navigation'
 
 export const SettingsScreen = () => {
@@ -30,8 +31,11 @@ export const SettingsScreen = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+        <View style={styles.header}>
+          <HeaderBackButton onPress={() => navigation.goBack()} />
           <Text style={styles.title}>⚙️ 設定</Text>
+        </View>
+        <View style={styles.content}>
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>通知</Text>
@@ -58,15 +62,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  content: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 40,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingHorizontal: 8,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 30,
+    marginLeft: 8,
+  },
+  content: {
+    flex: 1,
+    padding: 20,
   },
   section: {
     marginBottom: 30,
