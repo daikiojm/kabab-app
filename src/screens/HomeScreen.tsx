@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import {
   View,
   Text,
@@ -15,8 +15,10 @@ import { Card } from '@rneui/themed'
 import { RootStackNavigationProp } from '../types/navigation'
 import { BottomNavigation } from '../components/BottomNavigation'
 import { RecordForm } from '../components/RecordForm'
+import { useKebabRecords } from '../hooks/useKebabRecords'
 
 export const HomeScreen = () => {
+  const { stats, addRecord } = useKebabRecords()
   const navigation = useNavigation<RootStackNavigationProp>()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['50%', '90%'], [])
@@ -58,13 +60,13 @@ export const HomeScreen = () => {
               <Card containerStyle={styles.dashboardCard}>
                 <View style={styles.cardContent}>
                   <Text style={styles.cardTitle}>🔥 連続ケバブ日数</Text>
-                  <Text style={styles.cardValue}>7日</Text>
+                  <Text style={styles.cardValue}>{stats.consecutiveDays}日</Text>
                 </View>
               </Card>
               <Card containerStyle={styles.dashboardCard}>
                 <View style={styles.cardContent}>
                   <Text style={styles.cardTitle}>📊 累積ケバブ数</Text>
-                  <Text style={styles.cardValue}>42個</Text>
+                  <Text style={styles.cardValue}>{stats.totalCount}個</Text>
                 </View>
               </Card>
               <Card containerStyle={styles.dashboardCard}>
@@ -102,9 +104,9 @@ export const HomeScreen = () => {
           />
         )}
       >
-        <BottomSheetView style={styles.contentContainer}>
-          <RecordForm />
-        </BottomSheetView>
+      <BottomSheetView style={styles.contentContainer}>
+        <RecordForm onComplete={() => bottomSheetRef.current?.close()} />
+      </BottomSheetView>
       </BottomSheet>
     </>
   )

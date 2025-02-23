@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { useKebabRecords } from '../hooks/useKebabRecords'
+import { KebabType, MeatType, SauceType, Size } from '../types/record'
 
-type Option = {
+type Option<T> = {
   label: string
-  value: string
+  value: T
 }
 
-type SelectionProps = {
+type SelectionProps<T> = {
   title: string
-  options: Option[]
-  value: string
-  onSelect: (value: string) => void
+  options: Option<T>[]
+  value: T | ''
+  onSelect: (value: T) => void
 }
 
-const Selection: React.FC<SelectionProps> = ({ title, options, value, onSelect }) => {
+const Selection = <T extends string>({ title, options, value, onSelect }: SelectionProps<T>) => {
   return (
     <View style={styles.selectionContainer}>
       <Text style={styles.selectionTitle}>{title}</Text>
@@ -42,66 +44,86 @@ const Selection: React.FC<SelectionProps> = ({ title, options, value, onSelect }
   )
 }
 
-export const RecordForm = () => {
-  const [kebabType, setKebabType] = useState('')
-  const [meatType, setMeatType] = useState('')
-  const [sauceType, setSauceType] = useState('')
-  const [size, setSize] = useState('')
+type RecordFormProps = {
+  onComplete?: () => void
+}
 
-  const kebabTypes: Option[] = [
+export const RecordForm: React.FC<RecordFormProps> = ({ onComplete }) => {
+  const { addRecord } = useKebabRecords()
+  const [kebabType, setKebabType] = useState<KebabType | ''>('')
+  const [meatType, setMeatType] = useState<MeatType | ''>('')
+  const [sauceType, setSauceType] = useState<SauceType | ''>('')
+  const [size, setSize] = useState<Size | ''>('')
+
+  const kebabTypes: Option<KebabType>[] = [
     { label: 'ケバブ', value: 'kebab' },
     { label: 'ケバブ丼', value: 'kebab-bowl' },
   ]
 
-  const meatTypes: Option[] = [
+  const meatTypes: Option<MeatType>[] = [
     { label: 'チキン', value: 'chicken' },
     { label: 'ビーフ', value: 'beef' },
     { label: 'ミックス', value: 'mix' },
   ]
 
-  const sauceTypes: Option[] = [
+  const sauceTypes: Option<SauceType>[] = [
     { label: 'マイルド', value: 'mild' },
     { label: 'ホット', value: 'hot' },
     { label: 'ミックス', value: 'mix' },
   ]
 
-  const sizes: Option[] = [
+  const sizes: Option<Size>[] = [
     { label: '普通', value: 'regular' },
     { label: '大盛り', value: 'large' },
   ]
 
-  const handleSubmit = () => {
-    // TODO: 記録の保存処理
-    console.log({
+  const handleSubmit = async () => {
+    if (!kebabType || !meatType || !sauceType || !size) {
+      Alert.alert('エラー', '全ての項目を選択してください')
+      return
+    }
+
+    const result = await addRecord({
       kebabType,
       meatType,
       sauceType,
       size,
     })
+
+    if (result.success) {
+      Alert.alert('成功', 'ケバブの記録を保存しました！')
+      setKebabType('')
+      setMeatType('')
+      setSauceType('')
+      setSize('')
+      onComplete?.()
+    } else {
+      Alert.alert('エラー', result.error)
+    }
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ケバブを記録</Text>
-      <Selection
+      <Selection<KebabType>
         title="ケバブの種類"
         options={kebabTypes}
         value={kebabType}
         onSelect={setKebabType}
       />
-      <Selection
+      <Selection<MeatType>
         title="肉の種類"
         options={meatTypes}
         value={meatType}
         onSelect={setMeatType}
       />
-      <Selection
+      <Selection<SauceType>
         title="ソースの種類"
         options={sauceTypes}
         value={sauceType}
         onSelect={setSauceType}
       />
-      <Selection
+      <Selection<Size>
         title="量"
         options={sizes}
         value={size}

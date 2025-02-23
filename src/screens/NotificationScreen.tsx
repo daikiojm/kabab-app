@@ -1,46 +1,39 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { HeaderBackButton } from '@react-navigation/elements';
-import { RootStackNavigationProp } from '../types/navigation';
-
-type NotificationItem = {
-  id: string;
-  type: 'record' | 'news';
-  title: string;
-  message: string;
-  createdAt: string;
-};
-
-// サンプルデータ
-const mockNotifications: NotificationItem[] = [
-  {
-    id: '1',
-    type: 'record',
-    title: '新規記録',
-    message: '新しいケバブの記録が追加されました',
-    createdAt: '2024-02-23 12:00',
-  },
-  {
-    id: '2',
-    type: 'news',
-    title: 'ケバブ豆知識',
-    message: 'ケバブの語源は「焼く」を意味するアラビア語「kabāb」です',
-    createdAt: '2024-02-22 15:30',
-  },
-];
+import React, { useCallback } from 'react'
+import { View, Text, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { HeaderBackButton } from '@react-navigation/elements'
+import { RootStackNavigationProp } from '../types/navigation'
+import { useNotifications } from '../hooks/useNotifications'
+import { formatDate, formatTime } from '../utils/date'
+import { Notification } from '../types/notification'
 
 export const NotificationScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const renderItem = ({ item }: { item: NotificationItem }) => (
-    <View style={styles.notificationItem}>
+  const navigation = useNavigation<RootStackNavigationProp>()
+  const { notifications, markAsRead } = useNotifications()
+
+  const handleNotificationPress = useCallback((notification: Notification) => {
+    if (!notification.read) {
+      markAsRead(notification.id)
+    }
+  }, [markAsRead])
+
+  const renderItem = useCallback(({ item }: { item: Notification }) => (
+    <TouchableOpacity
+      style={[styles.notificationItem, !item.read && styles.unreadItem]}
+      onPress={() => handleNotificationPress(item)}
+    >
       <View style={styles.itemHeader}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.date}>{item.createdAt}</Text>
+        <Text style={styles.title}>
+          {item.type === 'record' ? '🥙 ' : '💡 '}
+          {item.title}
+        </Text>
+        <Text style={styles.date}>
+          {formatDate(item.createdAt)} {formatTime(item.createdAt)}
+        </Text>
       </View>
       <Text style={styles.message}>{item.message}</Text>
-    </View>
-  );
+    </TouchableOpacity>
+  ), [handleNotificationPress])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,7 +43,7 @@ export const NotificationScreen = () => {
       </View>
       <View style={styles.content}>
         <FlatList
-          data={mockNotifications}
+          data={notifications}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}
@@ -61,6 +54,9 @@ export const NotificationScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  unreadItem: {
+    backgroundColor: '#fff3e0',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

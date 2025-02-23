@@ -3,10 +3,13 @@ import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, SafeAreaView }
 import { useNavigation } from '@react-navigation/native'
 import { HeaderBackButton } from '@react-navigation/elements'
 import { RootStackNavigationProp } from '../types/navigation'
+import { useKebabRecords } from '../hooks/useKebabRecords'
+import { useNotifications } from '../hooks/useNotifications'
 
 export const SettingsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const { clearRecords } = useKebabRecords()
+  const { enabled: notificationsEnabled, toggleNotifications } = useNotifications()
 
   const handleResetHistory = () => {
     Alert.alert(
@@ -20,8 +23,9 @@ export const SettingsScreen = () => {
         {
           text: '削除',
           style: 'destructive',
-          onPress: () => {
-            // TODO: 履歴削除の実装
+          onPress: async () => {
+            await clearRecords()
+            Alert.alert('完了', '履歴を削除しました')
           },
         },
       ]
@@ -41,7 +45,10 @@ export const SettingsScreen = () => {
             <Text style={styles.sectionTitle}>通知</Text>
             <View style={styles.settingItem}>
               <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
-              <Switch value={notificationsEnabled} onValueChange={setNotificationsEnabled} />
+              <Switch
+                value={notificationsEnabled}
+                onValueChange={(value) => toggleNotifications(value)}
+              />
             </View>
           </View>
 
