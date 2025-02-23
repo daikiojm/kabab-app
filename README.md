@@ -95,6 +95,7 @@ npm run web
 
 - コミットメッセージは Conventional Commits に従うこと
   - https://www.conventionalcommits.org/ja/v1.0.0/
+  - この時、スコープも必ず明示すること
 - ライブラリ追加を伴う修正をする際には必ずラリブラリの開発元ページを確認してメンテナンス状況をチェックすること
 
 ## 開発ステータス
