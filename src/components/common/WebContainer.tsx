@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, StyleSheet, Platform, ViewStyle, DimensionValue } from 'react-native'
+import { View, StyleSheet, Platform, ViewStyle } from 'react-native'
+import { colors } from '../../styles/colors'
 
 type Props = {
   children: React.ReactNode
@@ -22,21 +23,21 @@ const styles = StyleSheet.create<{
   content: ViewStyle
 }>({
   container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
     alignItems: 'center',
+    backgroundColor: colors.surface,
+    flex: 1,
     minHeight: '100%',
-    paddingTop: Platform.select({ web: 16 }),
     paddingBottom: Platform.select({ web: 16 }),
+    paddingTop: Platform.select({ web: 16 }),
     position: Platform.OS === 'web' ? 'relative' : undefined,
   },
   content: {
-    width: Platform.OS === 'web' ? 375 : '100%',
-    maxWidth: '100%',
-    flex: 1,
-    backgroundColor: 'white',
     alignSelf: 'center',
+    backgroundColor: colors.background,
+    flex: 1,
+    maxWidth: '100%',
     overflow: Platform.OS === 'web' ? 'hidden' : undefined,
     position: Platform.OS === 'web' ? 'relative' : undefined,
+    width: Platform.OS === 'web' ? 375 : '100%',
   },
 })

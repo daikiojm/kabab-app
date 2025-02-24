@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { KebabType, MeatType, SauceType, Size } from '../types/record'
 
 export const kebabRecordSchema = z.object({
   kebabType: z.enum(['kebab', 'kebab-bowl'] as const).describe('ケバブの種類'),

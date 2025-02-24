@@ -22,7 +22,7 @@ export const KebabTips: React.FC<KebabTipsProps> = ({ tip = KEBAB_TIP }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     marginBottom: spacing.xl,
+    width: '100%',
   },
 })

@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
     borderRadius: radius.lg,
-    padding: spacing.md,
-    marginBottom: spacing.md,
     elevation: 2,
+    marginBottom: spacing.md,
+    padding: spacing.md,
     shadowColor: colors.text.primary,
     shadowOffset: {
       width: 0,
@@ -49,24 +49,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
   },
-  title: {
-    ...typography.heading.h3,
-    color: colors.text.primary,
-    marginBottom: spacing.sm,
-  },
   content: {
     alignItems: 'flex-start',
-  },
-  value: {
-    ...typography.heading.h2,
-    color: colors.text.primary,
-  },
-  highlightValue: {
-    color: colors.primary,
   },
   description: {
     ...typography.body.medium,
     color: colors.text.secondary,
     lineHeight: 20,
+  },
+  highlightValue: {
+    color: colors.primary,
+  },
+  title: {
+    ...typography.heading.h3,
+    color: colors.text.primary,
+    marginBottom: spacing.sm,
+  },
+  value: {
+    ...typography.heading.h2,
+    color: colors.text.primary,
   },
 })

@@ -5,14 +5,14 @@ module.exports = async function (env, argv) {
   env = {
     ...env,
     babel: {
-      dangerouslyAddModulePathsToTranspile: ['@rneui/base', '@rneui/themed']
+      dangerouslyAddModulePathsToTranspile: ['@rneui/base', '@rneui/themed'],
     },
     mode: 'production',
     platform: 'web',
     web: {
       publicPath: '/kabab-app/',
-      bundler: 'webpack'
-    }
+      bundler: 'webpack',
+    },
   }
 
   // Add homepage for GitHub Pages
@@ -23,7 +23,7 @@ module.exports = async function (env, argv) {
   // Set base path for all assets
   config.output = {
     ...config.output,
-    publicPath: '/kabab-app/'
+    publicPath: '/kabab-app/',
   }
 
   // Configure HTML webpack plugin
@@ -38,10 +38,7 @@ module.exports = async function (env, argv) {
           'AssetPathModifierPlugin',
           (data, cb) => {
             // Replace all asset paths with the correct base path
-            data.html = data.html.replace(
-              /(href|src)="\/(?!kabab-app\/)/g,
-              '$1="/kabab-app/'
-            )
+            data.html = data.html.replace(/(href|src)="\/(?!kabab-app\/)/g, '$1="/kabab-app/')
             cb(null, data)
           }
         )

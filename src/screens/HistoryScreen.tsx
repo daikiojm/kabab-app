@@ -1,8 +1,6 @@
 import React, { useMemo, useCallback, useRef, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
-import { RootStackNavigationProp } from '../types/navigation'
 import { BottomNavigation } from '../components/BottomNavigation'
 import { useKebabRecords } from '../hooks/useKebabRecords'
 import { groupByMonth } from '../utils/date'
@@ -15,7 +13,6 @@ import { typography } from '../styles/typography'
 import { KebabRecord } from '../types/record'
 
 export const HistoryScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>()
   const { records, loadRecords } = useKebabRecords()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [selectedRecord, setSelectedRecord] = useState<KebabRecord | null>(null)
@@ -36,7 +33,7 @@ export const HistoryScreen = () => {
   const handleEditComplete = useCallback(() => {
     bottomSheetRef.current?.close()
     setSelectedRecord(null)
-    loadRecords()
+    void loadRecords()
   }, [loadRecords])
 
   return (
@@ -104,56 +101,56 @@ export const HistoryScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
+  bottomSheetBackground: {
     backgroundColor: colors.background,
   },
   container: {
+    backgroundColor: colors.background,
     flex: 1,
-    backgroundColor: colors.background,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  header: {
-    padding: spacing.md,
-    paddingTop: spacing.xl,
-    backgroundColor: colors.background,
-  },
-  title: {
-    ...typography.heading.h1,
-  },
-  emptyContainer: {
-    padding: spacing.md,
-    alignItems: 'center',
-    marginTop: spacing.xl,
-  },
-  emptyText: {
-    ...typography.body.large,
-    color: colors.text.secondary,
-    marginBottom: spacing.sm,
-  },
-  emptySubText: {
-    ...typography.body.medium,
-    color: colors.text.disabled,
-  },
-  handleIndicator: {
-    backgroundColor: colors.text.disabled,
-    width: 40,
-    height: 4,
-  },
-  bottomSheetBackground: {
-    backgroundColor: colors.background,
   },
   contentContainer: {
     flex: 1,
   },
   editTitle: {
     ...typography.heading.h2,
-    textAlign: 'center',
     marginVertical: spacing.md,
+    textAlign: 'center',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    marginTop: spacing.xl,
+    padding: spacing.md,
+  },
+  emptySubText: {
+    ...typography.body.medium,
+    color: colors.text.disabled,
+  },
+  emptyText: {
+    ...typography.body.large,
+    color: colors.text.secondary,
+    marginBottom: spacing.sm,
+  },
+  handleIndicator: {
+    backgroundColor: colors.text.disabled,
+    height: 4,
+    width: 40,
+  },
+  header: {
+    backgroundColor: colors.background,
+    padding: spacing.md,
+    paddingTop: spacing.xl,
   },
   hidden: {
     opacity: 0,
+  },
+  root: {
+    backgroundColor: colors.background,
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  title: {
+    ...typography.heading.h1,
   },
 })

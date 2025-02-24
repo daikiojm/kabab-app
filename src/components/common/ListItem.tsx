@@ -39,12 +39,12 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     alignItems: 'center',
-    padding: spacing.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
+    flexDirection: 'row',
     marginBottom: spacing.sm,
+    padding: spacing.md,
   },
   highlighted: {
     backgroundColor: colors.notification.unread,
@@ -52,18 +52,18 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
   },
-  title: {
-    ...typography.body.large,
-    color: colors.text.primary,
-    marginBottom: spacing.xs,
+  rightText: {
+    ...typography.body.small,
+    color: colors.text.secondary,
+    marginLeft: spacing.sm,
   },
   subtitle: {
     ...typography.body.small,
     color: colors.text.secondary,
   },
-  rightText: {
-    ...typography.body.small,
-    color: colors.text.secondary,
-    marginLeft: spacing.sm,
+  title: {
+    ...typography.body.large,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
 })

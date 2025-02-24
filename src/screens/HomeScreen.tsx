@@ -9,16 +9,8 @@
  *
  * @see {@link Header} コンポーネントのドキュメントも参照してください
  */
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-  Platform,
-} from 'react-native'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
@@ -34,7 +26,7 @@ import { colors } from '../styles/colors'
 import { typography } from '../styles/typography'
 
 export const HomeScreen = () => {
-  const { stats, loadRecords } = useKebabRecords()
+  const { stats } = useKebabRecords()
   const insets = useSafeAreaInsets()
   const navigation = useNavigation<RootStackNavigationProp>()
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -54,19 +46,6 @@ export const HomeScreen = () => {
   const handleNavigateToNotification = useCallback(() => {
     navigation.navigate('Notification')
   }, [navigation])
-
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-        pressBehavior="close"
-        enableTouchThrough={false}
-      />
-    ),
-    []
-  )
 
   return (
     <>
@@ -134,35 +113,36 @@ export const HomeScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  section: {
-    width: '100%',
-    marginBottom: -spacing.lg,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: spacing.md,
-    color: colors.text.secondary,
+  bottomSheetBackground: {
+    backgroundColor: colors.background,
   },
   container: {
-    flex: 1,
     backgroundColor: colors.background,
-  },
-  scrollView: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   content: {
-    flex: 1,
     alignItems: 'center',
+    flex: 1,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
   },
+  contentContainer: {
+    flex: 1,
+    ...(Platform.OS === 'web' && {
+      position: 'relative',
+      zIndex: 9999,
+    }),
+  },
+  handleIndicator: {
+    backgroundColor: colors.text.disabled,
+    height: 4,
+    width: 40,
+  },
   recordButton: {
     backgroundColor: colors.primary,
-    paddingVertical: spacing.md,
     borderRadius: radius.md,
     elevation: 3,
+    paddingVertical: spacing.md,
     ...(Platform.OS === 'web'
       ? {
           boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.25)',
@@ -176,32 +156,31 @@ const styles = StyleSheet.create({
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
         }),
-    width: '80%',
     alignSelf: 'center',
+    width: '80%',
   },
   recordButtonText: {
     ...typography.button.medium,
     color: colors.background,
     textAlign: 'center',
   },
-  handleIndicator: {
-    backgroundColor: colors.text.disabled,
-    width: 40,
-    height: 4,
-  },
-  bottomSheetBackground: {
-    backgroundColor: colors.background,
-  },
-  contentContainer: {
-    flex: 1,
-    ...(Platform.OS === 'web' && {
-      position: 'relative',
-      zIndex: 9999,
-    }),
-  },
   recordTitle: {
     ...typography.heading.h2,
-    textAlign: 'center',
     marginVertical: spacing.md,
+    textAlign: 'center',
+  },
+  scrollView: {
+    backgroundColor: colors.background,
+    flex: 1,
+  },
+  section: {
+    marginBottom: -spacing.lg,
+    width: '100%',
+  },
+  sectionTitle: {
+    color: colors.text.secondary,
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: spacing.md,
   },
 })

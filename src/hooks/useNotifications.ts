@@ -27,7 +27,6 @@ import {
   scheduleNotification,
   cancelNotification,
   requestNotificationPermissions,
-  initializeNotifications,
 } from '../services/notification'
 
 const STORAGE_KEY = '@notifications'
@@ -51,13 +50,17 @@ export const useNotifications = () => {
         AsyncStorage.getItem(REMINDER_SETTINGS_KEY),
       ])
 
-      const notifications = notificationsJson ? JSON.parse(notificationsJson) : []
-      const settings = settingsJson ? JSON.parse(settingsJson) : { enabled: false }
-      const reminder = reminderJson ? JSON.parse(reminderJson) : DEFAULT_REMINDER_SETTINGS
+      const notifications = notificationsJson
+        ? (JSON.parse(notificationsJson) as Notification[])
+        : []
+      const settings = settingsJson
+        ? (JSON.parse(settingsJson) as { enabled: boolean })
+        : { enabled: false }
+      const reminder = reminderJson
+        ? (JSON.parse(reminderJson) as typeof DEFAULT_REMINDER_SETTINGS)
+        : DEFAULT_REMINDER_SETTINGS
 
-      // 既存の通知設定を読み込むのみ
-
-      setState((prev: NotificationState) => ({
+      setState((prev) => ({
         ...prev,
         notifications,
         enabled: settings.enabled,
@@ -73,6 +76,60 @@ export const useNotifications = () => {
     }
   }, [])
 
+  const scheduleReminderNotification = useCallback(
+    async (time: string): Promise<OperationResult<string>> => {
+      try {
+        // 既存のリマインダーをキャンセル
+        if (state.reminder.notificationId) {
+          await cancelNotification(state.reminder.notificationId)
+        }
+
+        const [hours, minutes] = time.split(':').map(Number)
+        const config: ReminderNotificationConfig = {
+          title: '🥙 ケバブの記録をお忘れなく',
+          body: '今日のケバブ記録はもうつけましたか？',
+          sound: true,
+          badge: 1,
+          data: {
+            type: 'reminder',
+            action: 'record',
+          },
+        }
+
+        const schedule: ReminderScheduleConfig = {
+          hour: hours,
+          minute: minutes,
+          repeats: true,
+        }
+
+        const notificationId = await scheduleNotification(config, schedule)
+
+        const updatedReminder = {
+          ...state.reminder,
+          notificationId,
+          time,
+        }
+
+        await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
+        setState((prev) => ({
+          ...prev,
+          reminder: updatedReminder,
+        }))
+        return { success: true, data: notificationId }
+      } catch (e) {
+        console.error('Error scheduling reminder:', e)
+        return {
+          success: false,
+          error:
+            e instanceof Error
+              ? e.message
+              : 'リマインダーのスケジュール設定中にエラーが発生しました',
+        }
+      }
+    },
+    [state.reminder]
+  )
+
   const addNotification = useCallback(
     async (
       notification: Omit<Notification, 'id' | 'createdAt' | 'read'>
@@ -87,7 +144,7 @@ export const useNotifications = () => {
 
         const updatedNotifications = [newNotification, ...state.notifications]
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedNotifications))
-        setState((prev: NotificationState) => ({
+        setState((prev) => ({
           ...prev,
           notifications: updatedNotifications,
         }))
@@ -110,7 +167,7 @@ export const useNotifications = () => {
           notification.id === id ? { ...notification, read: true } : notification
         )
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedNotifications))
-        setState((prev: NotificationState) => ({
+        setState((prev) => ({
           ...prev,
           notifications: updatedNotifications,
         }))
@@ -129,7 +186,7 @@ export const useNotifications = () => {
   const clearNotifications = useCallback(async (): Promise<OperationResult> => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]))
-      setState((prev: NotificationState) => ({
+      setState((prev) => ({
         ...prev,
         notifications: [],
       }))
@@ -142,55 +199,6 @@ export const useNotifications = () => {
       }
     }
   }, [])
-
-  const scheduleReminderNotification = async (time: string): Promise<OperationResult<string>> => {
-    try {
-      // 既存のリマインダーをキャンセル
-      if (state.reminder.notificationId) {
-        await cancelNotification(state.reminder.notificationId)
-      }
-
-      const [hours, minutes] = time.split(':').map(Number)
-      const config: ReminderNotificationConfig = {
-        title: '🥙 ケバブの記録をお忘れなく',
-        body: '今日のケバブ記録はもうつけましたか？',
-        sound: true,
-        badge: 1,
-        data: {
-          type: 'reminder',
-          action: 'record',
-        },
-      }
-
-      const schedule: ReminderScheduleConfig = {
-        hour: hours,
-        minute: minutes,
-        repeats: true,
-      }
-
-      const notificationId = await scheduleNotification(config, schedule)
-
-      const updatedReminder = {
-        ...state.reminder,
-        notificationId,
-        time,
-      }
-
-      await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
-      setState((prev: NotificationState) => ({
-        ...prev,
-        reminder: updatedReminder,
-      }))
-      return { success: true, data: notificationId }
-    } catch (e) {
-      console.error('Error scheduling reminder:', e)
-      return {
-        success: false,
-        error:
-          e instanceof Error ? e.message : 'リマインダーのスケジュール設定中にエラーが発生しました',
-      }
-    }
-  }
 
   const toggleNotifications = useCallback(
     async (enabled: boolean): Promise<OperationResult> => {
@@ -223,7 +231,7 @@ export const useNotifications = () => {
         await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
 
         // 状態を更新
-        setState((prev: NotificationState) => ({
+        setState((prev) => ({
           ...prev,
           enabled,
           reminder: updatedReminder,
@@ -237,7 +245,7 @@ export const useNotifications = () => {
         }
       }
     },
-    [state.reminder]
+    [state.reminder, scheduleReminderNotification]
   )
 
   const toggleReminder = useCallback(
@@ -268,7 +276,7 @@ export const useNotifications = () => {
         await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
 
         // 状態を更新
-        setState((prev: NotificationState) => ({
+        setState((prev) => ({
           ...prev,
           reminder: updatedReminder,
         }))
@@ -282,7 +290,7 @@ export const useNotifications = () => {
         }
       }
     },
-    [state.reminder, state.enabled]
+    [state.reminder, state.enabled, scheduleReminderNotification]
   )
 
   const updateReminderTime = useCallback(
@@ -302,7 +310,7 @@ export const useNotifications = () => {
         await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
 
         // 状態を更新
-        setState((prev: NotificationState) => ({
+        setState((prev) => ({
           ...prev,
           reminder: updatedReminder,
         }))
@@ -315,11 +323,11 @@ export const useNotifications = () => {
         }
       }
     },
-    [state.reminder, state.enabled]
+    [state.reminder, state.enabled, scheduleReminderNotification]
   )
 
   useEffect(() => {
-    loadNotifications()
+    void loadNotifications()
   }, [loadNotifications])
 
   return {

@@ -11,7 +11,10 @@
     "build:web": "expo export:web",
     "deploy": "gh-pages -d web-build",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "fix": "npm run format && npm run lint:fix"
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.1",
@@ -44,7 +47,15 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~18.2.45",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "crypto-browserify": "^3.12.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-native": "^4.1.0",
     "file-loader": "^6.2.0",
     "gh-pages": "^6.3.0",
     "stream-browserify": "^3.0.0",

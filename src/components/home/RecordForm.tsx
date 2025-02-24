@@ -89,7 +89,9 @@ export const RecordForm: React.FC<RecordFormProps> = ({
       <SizeSelector value={size} onSelect={setSize} />
       <TouchableOpacity
         style={[styles.submitButton, (!isFormValid || !hasChanges) && styles.submitButtonDisabled]}
-        onPress={handleSubmit}
+        onPress={() => {
+          void handleSubmit()
+        }}
         disabled={!isFormValid || !hasChanges}
       >
         <Text style={styles.submitButtonText}>{mode === 'create' ? '記録する' : '保存する'}</Text>
@@ -100,15 +102,15 @@ export const RecordForm: React.FC<RecordFormProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    paddingBottom: spacing.xl,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
-    paddingBottom: spacing.xl,
   },
   submitButton: {
     backgroundColor: colors.primary,
-    paddingVertical: spacing.md,
     borderRadius: radius.md,
     marginTop: spacing.md,
+    paddingVertical: spacing.md,
   },
   submitButtonDisabled: {
     backgroundColor: colors.text.disabled,

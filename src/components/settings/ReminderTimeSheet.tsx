@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Platform } from 'react-native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Button } from '@rneui/themed'
 import { reminderTimeSchema } from '../../schemas/reminder'
 import { colors } from '../../styles/colors'
@@ -29,7 +29,7 @@ export const ReminderTimeSheet: React.FC<ReminderTimeSheetProps> = ({
 
   const snapPoints = useMemo(() => ['65%'], [])
 
-  const handleTimeChange = useCallback((event: any, date?: Date) => {
+  const handleTimeChange = useCallback((_: DateTimePickerEvent, date?: Date) => {
     if (date) {
       setSelectedTime(date)
     }
@@ -117,53 +117,53 @@ export const ReminderTimeSheet: React.FC<ReminderTimeSheetProps> = ({
 }
 
 const styles = StyleSheet.create({
-  handleIndicator: {
-    backgroundColor: '#999',
-    width: 40,
-    height: 4,
-  },
   bottomSheetBackground: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
-  contentContainer: {
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    marginTop: 24,
+  },
+  buttonWrapper: {
     flex: 1,
+    marginHorizontal: 8,
   },
   container: {
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 8,
+  contentContainer: {
+    flex: 1,
   },
   description: {
+    color: colors.text.secondary,
     fontSize: 14,
-    color: '#666',
     marginBottom: 24,
+  },
+  handleIndicator: {
+    backgroundColor: colors.text.disabled,
+    height: 4,
+    width: 40,
+  },
+  outlineButton: {
+    borderColor: colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
   },
   pickerContainer: {
     alignItems: 'center',
     marginBottom: 24,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 24,
-    marginBottom: 16,
-  },
-  buttonWrapper: {
-    flex: 1,
-    marginHorizontal: 8,
   },
   primaryButton: {
     backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: 12,
   },
-  outlineButton: {
-    borderColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 12,
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
 })

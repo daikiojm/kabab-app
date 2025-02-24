@@ -24,7 +24,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ consecutiveDays,
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     marginBottom: spacing.xl,
+    width: '100%',
   },
 })

@@ -77,35 +77,35 @@ export const Header: React.FC<HeaderProps> = ({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    flexDirection: 'row',
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.sm,
+  },
+  iconText: {
+    fontSize: 24,
+  },
   leftIcon: {
-    width: 40,
+    alignItems: 'center',
     height: 40,
     justifyContent: 'center',
-    alignItems: 'center',
+    width: 40,
   },
-  container: {
-    flexDirection: 'row',
+  rightIcon: {
     alignItems: 'center',
-    paddingTop: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    backgroundColor: colors.background,
-  },
-  titleContainer: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: spacing.md,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
   },
   title: {
     ...typography.heading.h1,
     color: colors.text.primary,
   },
-  rightIcon: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
+  titleContainer: {
     alignItems: 'center',
-  },
-  iconText: {
-    fontSize: 24,
+    flex: 1,
+    paddingHorizontal: spacing.md,
   },
 })

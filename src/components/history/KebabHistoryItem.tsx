@@ -42,28 +42,28 @@ export const KebabHistoryItem: React.FC<KebabHistoryItemProps> = ({ record, onPr
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     alignItems: 'center',
-    padding: spacing.md,
     backgroundColor: colors.surface,
     borderRadius: radius.md,
+    flexDirection: 'row',
     marginBottom: spacing.sm,
+    padding: spacing.md,
   },
   date: {
     ...typography.body.large,
     marginRight: spacing.sm,
   },
-  kebabInfoContainer: {
-    flex: 1,
-    marginHorizontal: spacing.sm,
+  kebabDetail: {
+    ...typography.body.small,
+    color: colors.text.secondary,
   },
   kebabInfo: {
     ...typography.body.large,
     marginBottom: spacing.xs,
   },
-  kebabDetail: {
-    ...typography.body.small,
-    color: colors.text.secondary,
+  kebabInfoContainer: {
+    flex: 1,
+    marginHorizontal: spacing.sm,
   },
   time: {
     ...typography.body.small,

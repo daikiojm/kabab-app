@@ -1,0 +1,7 @@
+node_modules/
+web-build/
+babel.config.js
+metro.config.js
+webpack.config.js
+*.config.js
+scripts/

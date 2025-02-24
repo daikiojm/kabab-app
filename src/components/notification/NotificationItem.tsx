@@ -34,28 +34,28 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ notification
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
-    padding: spacing.md,
     borderRadius: radius.md,
     marginBottom: spacing.sm,
+    padding: spacing.md,
   },
-  unreadContainer: {
-    backgroundColor: colors.notification.unread,
+  date: {
+    ...typography.body.small,
+    color: colors.text.secondary,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: spacing.sm,
   },
+  message: {
+    ...typography.body.medium,
+    color: colors.text.primary,
+  },
   title: {
     ...typography.body.large,
     fontWeight: '600',
   },
-  date: {
-    ...typography.body.small,
-    color: colors.text.secondary,
-  },
-  message: {
-    ...typography.body.medium,
-    color: colors.text.primary,
+  unreadContainer: {
+    backgroundColor: colors.notification.unread,
   },
 })

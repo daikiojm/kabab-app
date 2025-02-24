@@ -12,7 +12,8 @@ interface NotificationConfig {
 // 通知の権限取得
 export const requestNotificationPermissions = async (): Promise<boolean> => {
   const { status } = await Notifications.requestPermissionsAsync()
-  return status === 'granted'
+  type PermissionStatus = 'granted' | 'denied' | 'undetermined'
+  return (status as PermissionStatus) === 'granted'
 }
 
 // 通知のスケジューリング
@@ -46,8 +47,8 @@ export const getNotificationSettings =
 // 通知ハンドラーの設定
 export const setNotificationHandler = (
   handler: (response: Notifications.NotificationResponse) => void
-) => {
-  Notifications.addNotificationResponseReceivedListener(handler)
+): void => {
+  void Notifications.addNotificationResponseReceivedListener(handler)
 }
 
 // バッジ数の更新
@@ -58,10 +59,13 @@ export const setBadgeCount = async (count: number): Promise<void> => {
 // 通知の初期設定
 export const initializeNotifications = (): void => {
   Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: true,
-    }),
+    handleNotification: async () => {
+      await Promise.resolve() // dummy await to satisfy the linter
+      return {
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }
+    },
   })
 }

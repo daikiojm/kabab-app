@@ -3,8 +3,6 @@ import { View, Text, StyleSheet } from 'react-native'
 import { colors } from '../../styles/colors'
 import { spacing } from '../../styles/spacing'
 import { typography } from '../../styles/typography'
-import { KebabRecord } from '../../types/record'
-import { KebabHistoryItem } from './KebabHistoryItem'
 
 type MonthlyGroupProps = {
   month: string

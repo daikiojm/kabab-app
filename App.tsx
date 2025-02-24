@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { createStackNavigator } from '@react-navigation/stack'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
-import { Platform, View, StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import { WebContainer } from './src/components/common/WebContainer'
 import { setNotificationHandler, initializeNotifications } from './src/services/notification'
 import { HomeScreen } from './src/screens/HomeScreen'
@@ -13,7 +13,6 @@ import { HistoryScreen } from './src/screens/HistoryScreen'
 import { SettingsScreen } from './src/screens/SettingsScreen'
 import { NotificationScreen } from './src/screens/NotificationScreen'
 import { RootStackParamList } from './src/types/navigation'
-import { ReminderTimeSheet } from './src/components/settings/ReminderTimeSheet'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -34,7 +33,7 @@ export default function App() {
         }
       })
     }
-  }, [])
+  }, [navigationRef])
 
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>

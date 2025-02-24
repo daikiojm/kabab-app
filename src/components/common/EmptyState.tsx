@@ -23,19 +23,19 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ title, description, emoj
 
 const styles = StyleSheet.create({
   container: {
-    padding: spacing.lg,
     alignItems: 'center',
     marginTop: spacing.xxl,
+    padding: spacing.lg,
+  },
+  description: {
+    ...typography.body.medium,
+    color: colors.text.disabled,
+    textAlign: 'center',
   },
   title: {
     ...typography.body.large,
     color: colors.text.secondary,
     marginBottom: spacing.sm,
-    textAlign: 'center',
-  },
-  description: {
-    ...typography.body.medium,
-    color: colors.text.disabled,
     textAlign: 'center',
   },
 })

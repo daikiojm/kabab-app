@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { HeaderBackButton } from '@react-navigation/elements'
@@ -6,6 +6,7 @@ import { RootStackNavigationProp } from '../types/navigation'
 import { useKebabRecords } from '../hooks/useKebabRecords'
 import { useNotifications } from '../hooks/useNotifications'
 import { ReminderTimeSheet } from '../components/settings/ReminderTimeSheet'
+import { colors } from '../styles/colors'
 
 export const SettingsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
@@ -30,27 +31,33 @@ export const SettingsScreen = () => {
         {
           text: '削除',
           style: 'destructive',
-          onPress: async () => {
-            await clearRecords()
-            Alert.alert('完了', '履歴を削除しました')
+          onPress: () => {
+            void (async () => {
+              await clearRecords()
+              Alert.alert('完了', '履歴を削除しました')
+            })()
           },
         },
       ]
     )
   }
 
-  const handleToggleNotifications = async (value: boolean) => {
-    const result = await toggleNotifications(value)
-    if (!result.success) {
-      Alert.alert('エラー', result.error)
-    }
+  const handleToggleNotifications = (value: boolean) => {
+    void (async () => {
+      const result = await toggleNotifications(value)
+      if (!result.success) {
+        Alert.alert('エラー', result.error)
+      }
+    })()
   }
 
-  const handleToggleReminder = async (value: boolean) => {
-    const result = await toggleReminder(value)
-    if (!result.success) {
-      Alert.alert('エラー', result.error)
-    }
+  const handleToggleReminder = (value: boolean) => {
+    void (async () => {
+      const result = await toggleReminder(value)
+      if (!result.success) {
+        Alert.alert('エラー', result.error)
+      }
+    })()
   }
 
   const [isTimeSheetVisible, setIsTimeSheetVisible] = useState(false)
@@ -119,7 +126,9 @@ export const SettingsScreen = () => {
       <ReminderTimeSheet
         isVisible={isTimeSheetVisible}
         onClose={() => setIsTimeSheetVisible(false)}
-        onSubmit={updateReminderTime}
+        onSubmit={(time) => {
+          void updateReminderTime(time)
+        }}
         initialTime={reminder.time}
       />
     </SafeAreaView>
@@ -127,84 +136,84 @@ export const SettingsScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  timeSettingButton: {
-    backgroundColor: '#f8f8f8',
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 8,
-  },
-  timeSettingLabel: {
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  timeSettingHint: {
-    fontSize: 12,
-    color: '#666',
-  },
   container: {
+    backgroundColor: colors.background,
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 8,
-    paddingHorizontal: 8,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginLeft: 8,
   },
   content: {
     flex: 1,
     padding: 20,
   },
+  dangerButton: {
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    borderColor: colors.error,
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: 15,
+  },
+  dangerButtonText: {
+    color: colors.error,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingTop: 8,
+  },
+  infoItem: {
+    alignItems: 'center',
+    borderBottomColor: colors.border,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  infoLabel: {
+    color: colors.text.secondary,
+    fontSize: 16,
+  },
+  infoValue: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
   section: {
     marginBottom: 30,
   },
   sectionTitle: {
+    color: colors.text.secondary,
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 15,
-    color: '#666',
   },
   settingItem: {
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     paddingVertical: 10,
   },
   settingLabel: {
     fontSize: 16,
   },
-  dangerButton: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ff4444',
-    padding: 15,
+  timeSettingButton: {
+    backgroundColor: colors.surface,
     borderRadius: 8,
-    alignItems: 'center',
+    marginTop: 8,
+    padding: 16,
   },
-  dangerButtonText: {
-    color: '#ff4444',
+  timeSettingHint: {
+    color: colors.text.secondary,
+    fontSize: 12,
+  },
+  timeSettingLabel: {
     fontSize: 16,
-    fontWeight: '600',
+    marginBottom: 4,
   },
-  infoItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  infoLabel: {
-    fontSize: 16,
-    color: '#666',
-  },
-  infoValue: {
-    fontSize: 16,
-    fontWeight: '500',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 })

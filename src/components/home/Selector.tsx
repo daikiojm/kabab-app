@@ -48,25 +48,14 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: spacing.lg,
   },
-  title: {
-    ...typography.body.large,
-    fontWeight: '600',
-    color: colors.text.primary,
-    marginBottom: spacing.sm,
-  },
-  optionsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
   optionButton: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    backgroundColor: colors.background,
+    borderColor: colors.border,
     borderRadius: radius.round,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
     minWidth: 80,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   optionButtonSelected: {
     backgroundColor: colors.primary,
@@ -80,5 +69,16 @@ const styles = StyleSheet.create({
   optionTextSelected: {
     color: colors.background,
     fontWeight: '600',
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  title: {
+    ...typography.body.large,
+    color: colors.text.primary,
+    fontWeight: '600',
+    marginBottom: spacing.sm,
   },
 })

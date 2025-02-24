@@ -6,6 +6,7 @@ import { RootStackNavigationProp } from '../types/navigation'
 import { useNotifications } from '../hooks/useNotifications'
 import { formatDate, formatTime } from '../utils/date'
 import { Notification } from '../types/notification'
+import { colors } from '../styles/colors'
 
 export const NotificationScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
@@ -14,7 +15,7 @@ export const NotificationScreen = () => {
   const handleNotificationPress = useCallback(
     (notification: Notification) => {
       if (!notification.read) {
-        markAsRead(notification.id)
+        void markAsRead(notification.id)
       }
     },
     [markAsRead]
@@ -60,51 +61,51 @@ export const NotificationScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  unreadItem: {
-    backgroundColor: '#fff3e0',
-  },
   container: {
+    backgroundColor: colors.background,
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 8,
-    paddingHorizontal: 8,
   },
   content: {
     flex: 1,
   },
-  screenTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginLeft: 8,
+  date: {
+    color: colors.text.secondary,
+    fontSize: 12,
   },
-  listContainer: {
-    padding: 16,
-  },
-  notificationItem: {
-    backgroundColor: '#f8f8f8',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingTop: 8,
   },
   itemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
   },
+  listContainer: {
+    padding: 16,
+  },
+  message: {
+    color: colors.text.primary,
+    fontSize: 14,
+  },
+  notificationItem: {
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    marginBottom: 12,
+    padding: 16,
+  },
+  screenTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
   title: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  date: {
-    fontSize: 12,
-    color: '#666',
-  },
-  message: {
-    fontSize: 14,
-    color: '#333',
+  unreadItem: {
+    backgroundColor: colors.notification.unread,
   },
 })

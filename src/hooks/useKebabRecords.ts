@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { KebabRecord, KebabRecordInput } from '../types/record'
 import { useNotifications } from './useNotifications'
 import { kebabRecordSchema } from '../schemas/record'
-import { ZodError } from 'zod'
 
 const STORAGE_KEY = '@kebab_records'
 
@@ -28,27 +27,6 @@ export const useKebabRecords = () => {
     consecutiveDays: 0,
     totalCount: 0,
   })
-
-  const loadRecords = useCallback(async (): Promise<OperationResult> => {
-    try {
-      const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
-      if (jsonValue != null) {
-        const data = JSON.parse(jsonValue) as StorageData | KebabRecord[]
-        // 古い形式のデータ互換性対応
-        const loadedRecords = Array.isArray(data) ? data : data.records
-        setRecords(loadedRecords)
-        calculateStats(loadedRecords)
-        return { success: true }
-      }
-      return { success: true }
-    } catch (e) {
-      console.error('Error loading records:', e)
-      return {
-        success: false,
-        error: e instanceof Error ? e.message : '記録の読み込み中にエラーが発生しました',
-      }
-    }
-  }, [])
 
   const calculateStats = useCallback((records: KebabRecord[]) => {
     // 合計数の計算
@@ -83,6 +61,27 @@ export const useKebabRecords = () => {
     })
   }, [])
 
+  const loadRecords = useCallback(async (): Promise<OperationResult> => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
+      if (jsonValue != null) {
+        const data = JSON.parse(jsonValue) as StorageData | KebabRecord[]
+        // 古い形式のデータ互換性対応
+        const loadedRecords = Array.isArray(data) ? data : data.records
+        setRecords(loadedRecords)
+        calculateStats(loadedRecords)
+        return { success: true }
+      }
+      return { success: true }
+    } catch (e) {
+      console.error('Error loading records:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '記録の読み込み中にエラーが発生しました',
+      }
+    }
+  }, [calculateStats])
+
   const addRecord = useCallback(
     async (input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
       try {
@@ -101,11 +100,15 @@ export const useKebabRecords = () => {
         calculateStats(updatedRecords)
 
         // 通知を作成
-        await addNotification({
-          type: 'record',
-          title: '新規記録',
-          message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}を記録しました！`,
-        })
+        try {
+          await addNotification({
+            type: 'record',
+            title: '新規記録',
+            message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}を記録しました！`,
+          })
+        } catch (error) {
+          console.error('Failed to add notification:', error)
+        }
 
         return { success: true, data: newRecord }
       } catch (error) {
@@ -116,7 +119,7 @@ export const useKebabRecords = () => {
         }
       }
     },
-    [records, calculateStats]
+    [records, calculateStats, addNotification]
   )
 
   const updateRecord = useCallback(
@@ -145,11 +148,15 @@ export const useKebabRecords = () => {
         calculateStats(updatedRecords)
 
         // 通知を作成
-        await addNotification({
-          type: 'record',
-          title: '記録を更新',
-          message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}の記録を更新しました！`,
-        })
+        try {
+          await addNotification({
+            type: 'record',
+            title: '記録を更新',
+            message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}の記録を更新しました！`,
+          })
+        } catch (error) {
+          console.error('Failed to add notification:', error)
+        }
 
         return { success: true, data: updatedRecord }
       } catch (error) {
@@ -182,7 +189,7 @@ export const useKebabRecords = () => {
   }, [])
 
   useEffect(() => {
-    loadRecords()
+    void loadRecords()
   }, [loadRecords])
 
   return {

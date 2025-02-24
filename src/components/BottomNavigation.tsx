@@ -25,34 +25,34 @@ export const BottomNavigation = () => {
 }
 
 const styles = StyleSheet.create({
+  activeIcon: {
+    opacity: 1,
+  },
+  activeLabel: {
+    color: '#000',
+    fontWeight: '600',
+  },
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#fff',
-    height: 80,
-    borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    height: 80,
+    justifyContent: 'space-around',
     paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-  },
-  tab: {
-    alignItems: 'center',
-    flex: 1,
   },
   icon: {
     fontSize: 24,
     marginBottom: 4,
     opacity: 0.5,
   },
-  activeIcon: {
-    opacity: 1,
-  },
   label: {
-    fontSize: 12,
     color: '#666',
+    fontSize: 12,
   },
-  activeLabel: {
-    color: '#000',
-    fontWeight: '600',
+  tab: {
+    alignItems: 'center',
+    flex: 1,
   },
 })

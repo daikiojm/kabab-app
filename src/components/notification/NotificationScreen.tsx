@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
-import { View, StyleSheet, FlatList, SafeAreaView } from 'react-native'
+import { StyleSheet, FlatList, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../types/navigation'
-import { Header } from '../common/Header'
+import { Header } from '../home/Header'
 import { EmptyState } from '../common/EmptyState'
 import { NotificationItem } from './NotificationItem'
 import { useNotifications } from '../../hooks/useNotifications'
@@ -17,7 +17,13 @@ export const NotificationScreen = () => {
   const handleNotificationPress = useCallback(
     (notification: Notification) => {
       if (!notification.read) {
-        markAsRead(notification.id)
+        void (async () => {
+          try {
+            await markAsRead(notification.id)
+          } catch (error) {
+            console.error('Failed to mark notification as read:', error)
+          }
+        })()
       }
     },
     [markAsRead]
@@ -53,8 +59,8 @@ export const NotificationScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: colors.background,
+    flex: 1,
   },
   listContainer: {
     padding: spacing.md,
