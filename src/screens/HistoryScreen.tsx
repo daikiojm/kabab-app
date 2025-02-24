@@ -92,22 +92,24 @@ export const HistoryScreen = () => {
         )}
       >
         <BottomSheetView style={styles.contentContainer}>
-          {selectedRecord && (
-            <>
-              <Text style={styles.editTitle}>記録を編集</Text>
-              <RecordForm
-                mode="edit"
-                recordId={selectedRecord.id}
-                initialValues={{
-                  kebabType: selectedRecord.kebabType,
-                  meatType: selectedRecord.meatType,
-                  sauceType: selectedRecord.sauceType,
-                  size: selectedRecord.size,
-                }}
-                onComplete={handleEditComplete}
-              />
-            </>
-          )}
+          <Text style={[styles.editTitle, !selectedRecord && styles.hidden]}>
+            記録を編集
+          </Text>
+          <RecordForm
+            mode="edit"
+            recordId={selectedRecord?.id}
+            initialValues={
+              selectedRecord
+                ? {
+                    kebabType: selectedRecord.kebabType,
+                    meatType: selectedRecord.meatType,
+                    sauceType: selectedRecord.sauceType,
+                    size: selectedRecord.size,
+                  }
+                : undefined
+            }
+            onComplete={handleEditComplete}
+          />
         </BottomSheetView>
       </BottomSheet>
     </>
@@ -163,5 +165,8 @@ const styles = StyleSheet.create({
     ...typography.heading.h2,
     textAlign: 'center',
     marginVertical: spacing.md,
+  },
+  hidden: {
+    opacity: 0,
   },
 })
