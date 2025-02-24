@@ -9,7 +9,7 @@
 
 アプリケーションの動作デモをご覧ください：
 
-[デモ動画](docs/kabab-app-demo-2025-02.mp4)
+https://github.com/user-attachments/assets/5dd8fdaa-2cdb-4f95-84d2-d965fcd8450d
 
 ## Requirements
 
