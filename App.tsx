@@ -5,7 +5,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { createStackNavigator } from '@react-navigation/stack'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
-import { Platform } from 'react-native'
+import { Platform, View, StyleSheet } from 'react-native'
+import { WebContainer } from './src/components/common/WebContainer'
 import { setNotificationHandler, initializeNotifications } from './src/services/notification'
 import { HomeScreen } from './src/screens/HomeScreen'
 import { HistoryScreen } from './src/screens/HistoryScreen'
@@ -36,36 +37,45 @@ export default function App() {
   }, [])
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer ref={navigationRef}>
-        <StatusBar style="auto" />
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            headerShown: false,
-            cardStyle: { backgroundColor: '#fff' },
-          }}
-        >
-          <Stack.Screen 
-            name="Home" 
-            component={HomeScreen}
-            options={{
-              gestureEnabled: false,
-              animation: 'none',
+    <GestureHandlerRootView style={styles.gestureHandler}>
+      <WebContainer>
+        <NavigationContainer ref={navigationRef}>
+          <StatusBar style="auto" />
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+              cardStyle: { backgroundColor: '#fff' },
             }}
-          />
-          <Stack.Screen 
-            name="History" 
-            component={HistoryScreen}
-            options={{
-              gestureEnabled: false,
-              animation: 'none',
-            }}
-          />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="Notification" component={NotificationScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+          >
+            <Stack.Screen 
+              name="Home" 
+              component={HomeScreen}
+              options={{
+                gestureEnabled: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen 
+              name="History" 
+              component={HistoryScreen}
+              options={{
+                gestureEnabled: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="Notification" component={NotificationScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </WebContainer>
     </GestureHandlerRootView>
   )
 }
+
+const styles = StyleSheet.create({
+  gestureHandler: {
+    flex: 1,
+    position: Platform.OS === 'web' ? 'relative' : undefined,
+  },
+})

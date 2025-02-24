@@ -31,28 +31,12 @@ export const HomeScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['65%', '90%'], [])
-  const [isWebModalVisible, setIsWebModalVisible] = useState(false)
-
-  const handleSheetChanges = useCallback((index: number) => {
-    if (Platform.OS === 'web') {
-      setIsWebModalVisible(index !== -1)
-    }
-  }, [])
-
   const handleOpenPress = useCallback(() => {
-    if (Platform.OS === 'web') {
-      setIsWebModalVisible(true)
-    } else if (bottomSheetRef.current) {
-      bottomSheetRef.current.snapToIndex(0)
-    }
+    bottomSheetRef.current?.snapToIndex(0)
   }, [])
 
   const handleClosePress = useCallback(() => {
-    if (Platform.OS === 'web') {
-      setIsWebModalVisible(false)
-    } else if (bottomSheetRef.current) {
-      bottomSheetRef.current.close()
-    }
+    bottomSheetRef.current?.close()
   }, [])
 
   const handleNavigateToSettings = useCallback(() => {
@@ -114,41 +98,33 @@ export const HomeScreen = () => {
       </View>
       <BottomNavigation />
 
-      {Platform.OS !== 'web' ? (
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
-          snapPoints={snapPoints}
-          enableContentPanningGesture
-          enableOverDrag
-          enablePanDownToClose
-          handleIndicatorStyle={styles.handleIndicator}
-          backgroundStyle={styles.bottomSheetBackground}
-          onChange={handleSheetChanges}
-          backdropComponent={renderBackdrop}
-          enableHandlePanningGesture
-        >
-          <BottomSheetView style={styles.contentContainer}>
-            <RecordForm
-              onComplete={() => {
-                handleClosePress()
-                navigation.navigate('History')
-              }}
-            />
-          </BottomSheetView>
-        </BottomSheet>
-      ) : (
-        <View style={[styles.webModal, !isWebModalVisible && { display: 'none' }]}>
-          <View style={styles.webModalContent}>
-            <RecordForm
-              onComplete={() => {
-                handleClosePress()
-                navigation.navigate('History')
-              }}
-            />
-          </View>
-        </View>
-      )}
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        enableContentPanningGesture
+        enableOverDrag
+        enablePanDownToClose
+        handleIndicatorStyle={styles.handleIndicator}
+        backgroundStyle={styles.bottomSheetBackground}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            disappearsOnIndex={-1}
+            appearsOnIndex={0}
+          />
+        )}
+      >
+        <BottomSheetView style={styles.contentContainer}>
+          <Text style={styles.recordTitle}>ケバブを記録</Text>
+          <RecordForm
+            onComplete={() => {
+              handleClosePress()
+              navigation.navigate('History')
+            }}
+          />
+        </BottomSheetView>
+      </BottomSheet>
     </>
   )
 }
@@ -212,32 +188,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
+    ...(Platform.OS === 'web' && {
+      position: 'relative',
+      zIndex: 9999,
+    }),
   },
-  webModal: Platform.select({
-    web: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1000,
-    },
-    default: {},
-  }),
-  webModalContent: Platform.select({
-    web: {
-      backgroundColor: colors.background,
-      borderRadius: radius.lg,
-      padding: spacing.lg,
-      width: '90%',
-      maxWidth: 500,
-      maxHeight: '80%',
-      overflowY: 'scroll',
-    },
-    default: {},
-  }),
+  recordTitle: {
+    ...typography.heading.h2,
+    textAlign: 'center',
+    marginVertical: spacing.md,
+  },
 })

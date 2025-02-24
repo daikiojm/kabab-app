@@ -39,6 +39,20 @@ export const SettingsScreen = () => {
     )
   }
 
+  const handleToggleNotifications = async (value: boolean) => {
+    const result = await toggleNotifications(value)
+    if (!result.success) {
+      Alert.alert('エラー', result.error)
+    }
+  }
+
+  const handleToggleReminder = async (value: boolean) => {
+    const result = await toggleReminder(value)
+    if (!result.success) {
+      Alert.alert('エラー', result.error)
+    }
+  }
+
   const [isTimeSheetVisible, setIsTimeSheetVisible] = useState(false)
 
   return (
@@ -54,7 +68,7 @@ export const SettingsScreen = () => {
             <Text style={styles.settingLabel}>通知を有効にする</Text>
             <Switch
               value={notificationsEnabled}
-              onValueChange={(value) => toggleNotifications(value)}
+              onValueChange={handleToggleNotifications}
             />
           </View>
 
@@ -62,7 +76,7 @@ export const SettingsScreen = () => {
             <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
             <Switch
               value={reminder.enabled}
-              onValueChange={(value) => toggleReminder(value)}
+              onValueChange={handleToggleReminder}
               disabled={!notificationsEnabled}
             />
           </View>
