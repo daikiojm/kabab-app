@@ -1,6 +1,9 @@
 # kabab-app
 
-ケバブ愛好家のための記録アプリケーション 🥙
+<div align="center">
+  <img src="assets/icon.png" alt="Kabab App Icon" width="120" height="120" />
+  <h3>ケバブ愛好家のための記録アプリケーション 🥙</h3>
+</div>
 
 ## 開発環境のセットアップ
 
