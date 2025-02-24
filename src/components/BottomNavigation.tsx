@@ -11,18 +11,12 @@ export const BottomNavigation = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.tab}
-        onPress={() => navigation.navigate('Home')}
-      >
+      <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('Home')}>
         <Text style={[styles.icon, isActive('Home') && styles.activeIcon]}>🥙</Text>
         <Text style={[styles.label, isActive('Home') && styles.activeLabel]}>記録</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.tab}
-        onPress={() => navigation.navigate('History')}
-      >
+      <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('History')}>
         <Text style={[styles.icon, isActive('History') && styles.activeIcon]}>📅</Text>
         <Text style={[styles.label, isActive('History') && styles.activeLabel]}>履歴</Text>
       </TouchableOpacity>

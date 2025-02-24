@@ -1,16 +1,16 @@
 /**
  * ヘッダーコンポーネント
- * 
+ *
  * @important
  * ノッチ付きデバイスでのレイアウトずれに注意
  * - SafeAreaView と組み合わせて使用する場合、適切なパディングの設定が必要
  * - useSafeAreaInsets を使用してデバイスに応じたパディングを設定することを推奨
  * - レイアウトの変更時は、様々なデバイスでの表示確認を推奨
- * 
+ *
  * @example
  * // 推奨される使用方法
  * import { useSafeAreaInsets } from 'react-native-safe-area-context';
- * 
+ *
  * const Component = () => {
  *   const insets = useSafeAreaInsets();
  *   return (
@@ -55,23 +55,18 @@ export const Header: React.FC<HeaderProps> = ({
     <View style={[styles.container, containerStyle]}>
       {showBack && <HeaderBackButton onPress={onBack} />}
       {leftIcon && (
-        <TouchableOpacity
-          style={styles.leftIcon}
-          onPress={onLeftIconPress}
-        >
+        <TouchableOpacity style={styles.leftIcon} onPress={onLeftIconPress}>
           <Text style={styles.iconText}>{leftIcon}</Text>
         </TouchableOpacity>
       )}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>
-          {emoji && `${emoji} `}{title}
+          {emoji && `${emoji} `}
+          {title}
         </Text>
       </View>
       {rightIcon ? (
-        <TouchableOpacity
-          style={styles.rightIcon}
-          onPress={onRightIconPress}
-        >
+        <TouchableOpacity style={styles.rightIcon} onPress={onRightIconPress}>
           <Text style={styles.iconText}>{rightIcon}</Text>
         </TouchableOpacity>
       ) : (

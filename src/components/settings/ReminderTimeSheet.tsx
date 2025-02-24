@@ -74,49 +74,43 @@ export const ReminderTimeSheet: React.FC<ReminderTimeSheetProps> = ({
         }
       }}
       backdropComponent={(props) => (
-        <BottomSheetBackdrop
-          {...props}
-          disappearsOnIndex={-1}
-          appearsOnIndex={0}
-        />
+        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
       )}
       handleIndicatorStyle={styles.handleIndicator}
       backgroundStyle={styles.bottomSheetBackground}
     >
       <BottomSheetView style={styles.contentContainer}>
-      <View style={styles.container}>
-        <Text style={styles.title}>🕒 リマインド時刻の設定</Text>
-        <Text style={styles.description}>
-          毎日この時刻にケバブ記録の通知が届きます
-        </Text>
+        <View style={styles.container}>
+          <Text style={styles.title}>🕒 リマインド時刻の設定</Text>
+          <Text style={styles.description}>毎日この時刻にケバブ記録の通知が届きます</Text>
 
-        <View style={styles.pickerContainer}>
-          <DateTimePicker
-            value={selectedTime}
-            mode="time"
-            is24Hour={true}
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={handleTimeChange}
-          />
-        </View>
+          <View style={styles.pickerContainer}>
+            <DateTimePicker
+              value={selectedTime}
+              mode="time"
+              is24Hour={true}
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={handleTimeChange}
+            />
+          </View>
 
-        <View style={styles.buttonContainer}>
-          <Button
-            title="キャンセル"
-            type="outline"
-            onPress={onClose}
-            containerStyle={styles.buttonWrapper}
-            buttonStyle={styles.outlineButton}
-            titleStyle={{ color: colors.primary }}
-          />
-          <Button
-            title="設定"
-            onPress={handleSubmit}
-            containerStyle={styles.buttonWrapper}
-            buttonStyle={styles.primaryButton}
-          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title="キャンセル"
+              type="outline"
+              onPress={onClose}
+              containerStyle={styles.buttonWrapper}
+              buttonStyle={styles.outlineButton}
+              titleStyle={{ color: colors.primary }}
+            />
+            <Button
+              title="設定"
+              onPress={handleSubmit}
+              containerStyle={styles.buttonWrapper}
+              buttonStyle={styles.primaryButton}
+            />
+          </View>
         </View>
-      </View>
       </BottomSheetView>
     </BottomSheet>
   )

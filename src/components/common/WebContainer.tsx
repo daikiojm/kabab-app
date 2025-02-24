@@ -1,27 +1,25 @@
-import React from 'react';
-import { View, StyleSheet, Platform, ViewStyle, DimensionValue } from 'react-native';
+import React from 'react'
+import { View, StyleSheet, Platform, ViewStyle, DimensionValue } from 'react-native'
 
 type Props = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 
 export const WebContainer: React.FC<Props> = ({ children }) => {
   if (Platform.OS !== 'web') {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        {children}
-      </View>
+      <View style={styles.content}>{children}</View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create<{
-  container: ViewStyle;
-  content: ViewStyle;
+  container: ViewStyle
+  content: ViewStyle
 }>({
   container: {
     flex: 1,
@@ -41,4 +39,4 @@ const styles = StyleSheet.create<{
     overflow: Platform.OS === 'web' ? 'hidden' : undefined,
     position: Platform.OS === 'web' ? 'relative' : undefined,
   },
-});
+})

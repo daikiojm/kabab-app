@@ -11,19 +11,14 @@ type CardProps = {
   children: React.ReactNode
 }
 
-export const Card: React.FC<CardProps> = ({
-  title,
-  emoji,
-  children,
-}) => {
+export const Card: React.FC<CardProps> = ({ title, emoji, children }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {emoji && `${emoji} `}{title}
+        {emoji && `${emoji} `}
+        {title}
       </Text>
-      <View style={styles.content}>
-        {children}
-      </View>
+      <View style={styles.content}>{children}</View>
     </View>
   )
 }
@@ -32,19 +27,12 @@ export const CardValue: React.FC<{
   value: string | number
   highlight?: boolean
 }> = ({ value, highlight }) => (
-  <Text style={[
-    styles.value,
-    highlight && styles.highlightValue
-  ]}>
-    {value}
-  </Text>
+  <Text style={[styles.value, highlight && styles.highlightValue]}>{value}</Text>
 )
 
 export const CardDescription: React.FC<{
   text: string
-}> = ({ text }) => (
-  <Text style={styles.description}>{text}</Text>
-)
+}> = ({ text }) => <Text style={styles.description}>{text}</Text>
 
 const styles = StyleSheet.create({
   container: {

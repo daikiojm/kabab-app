@@ -38,9 +38,10 @@ export const cancelNotification = async (identifier: string): Promise<void> => {
 }
 
 // 通知設定の取得
-export const getNotificationSettings = async (): Promise<Notifications.NotificationPermissionsStatus> => {
-  return await Notifications.getPermissionsAsync()
-}
+export const getNotificationSettings =
+  async (): Promise<Notifications.NotificationPermissionsStatus> => {
+    return await Notifications.getPermissionsAsync()
+  }
 
 // 通知ハンドラーの設定
 export const setNotificationHandler = (

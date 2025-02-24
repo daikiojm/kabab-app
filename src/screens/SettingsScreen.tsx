@@ -66,10 +66,7 @@ export const SettingsScreen = () => {
           <Text style={styles.sectionTitle}>通知</Text>
           <View style={styles.settingItem}>
             <Text style={styles.settingLabel}>通知を有効にする</Text>
-            <Switch
-              value={notificationsEnabled}
-              onValueChange={handleToggleNotifications}
-            />
+            <Switch value={notificationsEnabled} onValueChange={handleToggleNotifications} />
           </View>
 
           <View style={styles.settingItem}>

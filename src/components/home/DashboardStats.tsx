@@ -8,23 +8,14 @@ type DashboardStatsProps = {
   totalCount: number
 }
 
-export const DashboardStats: React.FC<DashboardStatsProps> = ({
-  consecutiveDays,
-  totalCount,
-}) => {
+export const DashboardStats: React.FC<DashboardStatsProps> = ({ consecutiveDays, totalCount }) => {
   return (
     <View style={styles.container}>
-      <Card
-        title="連続ケバブ日数"
-        emoji="🔥"
-      >
+      <Card title="連続ケバブ日数" emoji="🔥">
         <CardValue value={`${consecutiveDays}日`} highlight />
       </Card>
 
-      <Card
-        title="累積ケバブ数"
-        emoji="📊"
-      >
+      <Card title="累積ケバブ数" emoji="📊">
         <CardValue value={`${totalCount}個`} highlight />
       </Card>
     </View>

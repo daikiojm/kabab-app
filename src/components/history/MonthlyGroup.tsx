@@ -11,10 +11,7 @@ type MonthlyGroupProps = {
   children: React.ReactNode
 }
 
-export const MonthlyGroup: React.FC<MonthlyGroupProps> = ({
-  month,
-  children,
-}) => {
+export const MonthlyGroup: React.FC<MonthlyGroupProps> = ({ month, children }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.monthTitle}>{month}</Text>

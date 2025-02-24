@@ -29,21 +29,21 @@ export const sizes: Option<Size>[] = [
 ]
 
 export const getKebabTypeLabel = (value: KebabType): string => {
-  return kebabTypes.find(type => type.value === value)?.label ?? value
+  return kebabTypes.find((type) => type.value === value)?.label ?? value
 }
 
 export const getMeatTypeLabel = (value: MeatType): string => {
-  return meatTypes.find(type => type.value === value)?.label ?? value
+  return meatTypes.find((type) => type.value === value)?.label ?? value
 }
 
 export const getSauceTypeLabel = (value: SauceType): string => {
-  return sauceTypes.find(type => type.value === value)?.label ?? value
+  return sauceTypes.find((type) => type.value === value)?.label ?? value
 }
 
 export const getSizeLabel = (value: Size): string => {
-  return sizes.find(size => size.value === value)?.label ?? value
+  return sizes.find((size) => size.value === value)?.label ?? value
 }
 
 export const getKebabEmoji = (value: KebabType): string => {
-  return kebabTypes.find(type => type.value === value)?.emoji ?? '🥙'
+  return kebabTypes.find((type) => type.value === value)?.emoji ?? '🥙'
 }

@@ -51,23 +51,15 @@ export const HistoryScreen = () => {
             {Object.entries(groupedRecords).map(([month, monthRecords]) => (
               <MonthlyGroup key={month} month={month}>
                 {monthRecords.map((record) => (
-                  <KebabHistoryItem
-                    key={record.id}
-                    record={record}
-                    onPress={handleRecordPress}
-                  />
+                  <KebabHistoryItem key={record.id} record={record} onPress={handleRecordPress} />
                 ))}
               </MonthlyGroup>
             ))}
 
             {records.length === 0 && (
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>
-                  まだケバブの記録がありません 🥙
-                </Text>
-                <Text style={styles.emptySubText}>
-                  ホーム画面から記録を追加してみましょう！
-                </Text>
+                <Text style={styles.emptyText}>まだケバブの記録がありません 🥙</Text>
+                <Text style={styles.emptySubText}>ホーム画面から記録を追加してみましょう！</Text>
               </View>
             )}
           </ScrollView>
@@ -85,17 +77,11 @@ export const HistoryScreen = () => {
         handleIndicatorStyle={styles.handleIndicator}
         backgroundStyle={styles.bottomSheetBackground}
         backdropComponent={(props) => (
-          <BottomSheetBackdrop
-            {...props}
-            disappearsOnIndex={-1}
-            appearsOnIndex={0}
-          />
+          <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
         )}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <Text style={[styles.editTitle, !selectedRecord && styles.hidden]}>
-            記録を編集
-          </Text>
+          <Text style={[styles.editTitle, !selectedRecord && styles.hidden]}>記録を編集</Text>
           <RecordForm
             mode="edit"
             recordId={selectedRecord?.id}

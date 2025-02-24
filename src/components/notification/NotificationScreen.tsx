@@ -14,27 +14,25 @@ export const NotificationScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
   const { notifications, markAsRead } = useNotifications()
 
-  const handleNotificationPress = useCallback((notification: Notification) => {
-    if (!notification.read) {
-      markAsRead(notification.id)
-    }
-  }, [markAsRead])
+  const handleNotificationPress = useCallback(
+    (notification: Notification) => {
+      if (!notification.read) {
+        markAsRead(notification.id)
+      }
+    },
+    [markAsRead]
+  )
 
-  const renderItem = useCallback(({ item }: { item: Notification }) => (
-    <NotificationItem
-      notification={item}
-      onPress={handleNotificationPress}
-    />
-  ), [handleNotificationPress])
+  const renderItem = useCallback(
+    ({ item }: { item: Notification }) => (
+      <NotificationItem notification={item} onPress={handleNotificationPress} />
+    ),
+    [handleNotificationPress]
+  )
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        title="通知"
-        emoji="🔔"
-        showBack
-        onBack={() => navigation.goBack()}
-      />
+      <Header title="通知" emoji="🔔" showBack onBack={() => navigation.goBack()} />
       {notifications.length === 0 ? (
         <EmptyState
           title="通知はありません"

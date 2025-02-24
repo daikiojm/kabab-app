@@ -61,16 +61,16 @@ export default function App() {
               cardStyle: { backgroundColor: '#fff' },
             }}
           >
-            <Stack.Screen 
-              name="Home" 
+            <Stack.Screen
+              name="Home"
               component={HomeScreen}
               options={{
                 gestureEnabled: false,
                 animation: 'none',
               }}
             />
-            <Stack.Screen 
-              name="History" 
+            <Stack.Screen
+              name="History"
               component={HistoryScreen}
               options={{
                 gestureEnabled: false,

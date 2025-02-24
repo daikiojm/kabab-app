@@ -11,16 +11,10 @@ type NotificationItemProps = {
   onPress: (notification: Notification) => void
 }
 
-export const NotificationItem: React.FC<NotificationItemProps> = ({
-  notification,
-  onPress,
-}) => {
+export const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onPress }) => {
   return (
     <TouchableOpacity
-      style={[
-        styles.container,
-        !notification.read && styles.unreadContainer,
-      ]}
+      style={[styles.container, !notification.read && styles.unreadContainer]}
       onPress={() => onPress(notification)}
     >
       <View style={styles.header}>

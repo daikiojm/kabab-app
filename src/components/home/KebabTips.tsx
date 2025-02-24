@@ -10,15 +10,10 @@ type KebabTipsProps = {
   tip?: string
 }
 
-export const KebabTips: React.FC<KebabTipsProps> = ({
-  tip = KEBAB_TIP,
-}) => {
+export const KebabTips: React.FC<KebabTipsProps> = ({ tip = KEBAB_TIP }) => {
   return (
     <View style={styles.container}>
-      <Card
-        title="ケバブ豆知識"
-        emoji="💡"
-      >
+      <Card title="ケバブ豆知識" emoji="💡">
         <CardDescription text={tip} />
       </Card>
     </View>

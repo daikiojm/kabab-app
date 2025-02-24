@@ -1,11 +1,6 @@
 import React from 'react'
 import { Selector } from '../Selector'
-import {
-  kebabTypes,
-  meatTypes,
-  sauceTypes,
-  sizes,
-} from '../../../constants/kebabOptions'
+import { kebabTypes, meatTypes, sauceTypes, sizes } from '../../../constants/kebabOptions'
 import { KebabType, MeatType, SauceType, Size } from '../../../types/record'
 
 type SelectorComponentProps<T> = {
@@ -47,12 +42,5 @@ export const SauceTypeSelector: React.FC<SelectorComponentProps<SauceType>> = (p
 }
 
 export const SizeSelector: React.FC<SelectorComponentProps<Size>> = (props) => {
-  return (
-    <Selector<Size>
-      title="量"
-      options={sizes}
-      value={props.value}
-      onSelect={props.onSelect}
-    />
-  )
+  return <Selector<Size> title="量" options={sizes} value={props.value} onSelect={props.onSelect} />
 }

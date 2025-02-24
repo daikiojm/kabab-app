@@ -11,29 +11,35 @@ export const NotificationScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
   const { notifications, markAsRead } = useNotifications()
 
-  const handleNotificationPress = useCallback((notification: Notification) => {
-    if (!notification.read) {
-      markAsRead(notification.id)
-    }
-  }, [markAsRead])
+  const handleNotificationPress = useCallback(
+    (notification: Notification) => {
+      if (!notification.read) {
+        markAsRead(notification.id)
+      }
+    },
+    [markAsRead]
+  )
 
-  const renderItem = useCallback(({ item }: { item: Notification }) => (
-    <TouchableOpacity
-      style={[styles.notificationItem, !item.read && styles.unreadItem]}
-      onPress={() => handleNotificationPress(item)}
-    >
-      <View style={styles.itemHeader}>
-        <Text style={styles.title}>
-          {item.type === 'record' ? '🥙 ' : '💡 '}
-          {item.title}
-        </Text>
-        <Text style={styles.date}>
-          {formatDate(item.createdAt)} {formatTime(item.createdAt)}
-        </Text>
-      </View>
-      <Text style={styles.message}>{item.message}</Text>
-    </TouchableOpacity>
-  ), [handleNotificationPress])
+  const renderItem = useCallback(
+    ({ item }: { item: Notification }) => (
+      <TouchableOpacity
+        style={[styles.notificationItem, !item.read && styles.unreadItem]}
+        onPress={() => handleNotificationPress(item)}
+      >
+        <View style={styles.itemHeader}>
+          <Text style={styles.title}>
+            {item.type === 'record' ? '🥙 ' : '💡 '}
+            {item.title}
+          </Text>
+          <Text style={styles.date}>
+            {formatDate(item.createdAt)} {formatTime(item.createdAt)}
+          </Text>
+        </View>
+        <Text style={styles.message}>{item.message}</Text>
+      </TouchableOpacity>
+    ),
+    [handleNotificationPress]
+  )
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,8 +56,8 @@ export const NotificationScreen = () => {
         />
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   unreadItem: {
@@ -101,4 +107,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-});
+})

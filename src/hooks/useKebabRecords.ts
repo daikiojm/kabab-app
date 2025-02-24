@@ -12,7 +12,7 @@ export interface KebabStats {
   totalCount: number
 }
 
-type OperationResult<T = undefined> = 
+type OperationResult<T = undefined> =
   | { success: true; data?: T }
   | { success: false; error: string }
 
@@ -43,9 +43,9 @@ export const useKebabRecords = () => {
       return { success: true }
     } catch (e) {
       console.error('Error loading records:', e)
-      return { 
-        success: false, 
-        error: e instanceof Error ? e.message : '記録の読み込み中にエラーが発生しました'
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '記録の読み込み中にエラーが発生しました',
       }
     }
   }, [])
@@ -55,9 +55,9 @@ export const useKebabRecords = () => {
     const totalCount = records.length
 
     // 連続日数の計算
-    const sortedDates = [...new Set(
-      records.map(r => r.createdAt.split('T')[0])
-    )].sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+    const sortedDates = [...new Set(records.map((r) => r.createdAt.split('T')[0]))].sort(
+      (a, b) => new Date(b).getTime() - new Date(a).getTime()
+    )
 
     let consecutiveDays = 0
     const today = new Date().toISOString().split('T')[0]
@@ -83,79 +83,85 @@ export const useKebabRecords = () => {
     })
   }, [])
 
-  const addRecord = useCallback(async (input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
-    try {
-      // バリデーション
-      kebabRecordSchema.parse(input)
+  const addRecord = useCallback(
+    async (input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
+      try {
+        // バリデーション
+        kebabRecordSchema.parse(input)
 
-      const newRecord: KebabRecord = {
-        id: Date.now().toString(),
-        ...input,
-        createdAt: new Date().toISOString(),
-      }
+        const newRecord: KebabRecord = {
+          id: Date.now().toString(),
+          ...input,
+          createdAt: new Date().toISOString(),
+        }
 
-      const updatedRecords = [...records, newRecord]
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecords))
-      setRecords(updatedRecords)
-      calculateStats(updatedRecords)
+        const updatedRecords = [...records, newRecord]
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecords))
+        setRecords(updatedRecords)
+        calculateStats(updatedRecords)
 
-      // 通知を作成
-      await addNotification({
-        type: 'record',
-        title: '新規記録',
-        message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}を記録しました！`,
-      })
+        // 通知を作成
+        await addNotification({
+          type: 'record',
+          title: '新規記録',
+          message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}を記録しました！`,
+        })
 
-      return { success: true, data: newRecord }
-    } catch (error) {
-      console.error('Error adding record:', error)
-      return {
-        success: false as const,
-        error: error instanceof Error ? error.message : '不明なエラーが発生しました',
-      }
-    }
-  }, [records, calculateStats])
-
-  const updateRecord = useCallback(async (id: string, input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
-    try {
-      // バリデーション
-      kebabRecordSchema.parse(input)
-
-      const recordIndex = records.findIndex(r => r.id === id)
-      if (recordIndex === -1) {
+        return { success: true, data: newRecord }
+      } catch (error) {
+        console.error('Error adding record:', error)
         return {
           success: false as const,
-          error: '指定されたレコードが見つかりませんでした',
+          error: error instanceof Error ? error.message : '不明なエラーが発生しました',
         }
       }
+    },
+    [records, calculateStats]
+  )
 
-      const updatedRecord: KebabRecord = {
-        ...records[recordIndex],
-        ...input,
+  const updateRecord = useCallback(
+    async (id: string, input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
+      try {
+        // バリデーション
+        kebabRecordSchema.parse(input)
+
+        const recordIndex = records.findIndex((r) => r.id === id)
+        if (recordIndex === -1) {
+          return {
+            success: false as const,
+            error: '指定されたレコードが見つかりませんでした',
+          }
+        }
+
+        const updatedRecord: KebabRecord = {
+          ...records[recordIndex],
+          ...input,
+        }
+
+        const updatedRecords = [...records]
+        updatedRecords[recordIndex] = updatedRecord
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecords))
+        setRecords(updatedRecords)
+        calculateStats(updatedRecords)
+
+        // 通知を作成
+        await addNotification({
+          type: 'record',
+          title: '記録を更新',
+          message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}の記録を更新しました！`,
+        })
+
+        return { success: true, data: updatedRecord }
+      } catch (error) {
+        console.error('Error updating record:', error)
+        return {
+          success: false as const,
+          error: error instanceof Error ? error.message : '不明なエラーが発生しました',
+        }
       }
-
-      const updatedRecords = [...records]
-      updatedRecords[recordIndex] = updatedRecord
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecords))
-      setRecords(updatedRecords)
-      calculateStats(updatedRecords)
-
-      // 通知を作成
-      await addNotification({
-        type: 'record',
-        title: '記録を更新',
-        message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}の記録を更新しました！`,
-      })
-
-      return { success: true, data: updatedRecord }
-    } catch (error) {
-      console.error('Error updating record:', error)
-      return {
-        success: false as const,
-        error: error instanceof Error ? error.message : '不明なエラーが発生しました',
-      }
-    }
-  }, [records, calculateStats, addNotification])
+    },
+    [records, calculateStats, addNotification]
+  )
 
   const clearRecords = useCallback(async (): Promise<OperationResult> => {
     try {
@@ -168,9 +174,9 @@ export const useKebabRecords = () => {
       return { success: true }
     } catch (e) {
       console.error('Error clearing records:', e)
-      return { 
-        success: false, 
-        error: e instanceof Error ? e.message : '記録のクリア中にエラーが発生しました'
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '記録のクリア中にエラーが発生しました',
       }
     }
   }, [])

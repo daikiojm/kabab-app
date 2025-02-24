@@ -18,29 +18,20 @@ type KebabHistoryItemProps = {
   onPress?: (record: KebabRecord) => void
 }
 
-export const KebabHistoryItem: React.FC<KebabHistoryItemProps> = ({
-  record,
-  onPress,
-}) => {
+export const KebabHistoryItem: React.FC<KebabHistoryItemProps> = ({ record, onPress }) => {
   const handlePress = () => {
     onPress?.(record)
   }
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={handlePress}
-      activeOpacity={0.7}
-    >
+    <TouchableOpacity style={styles.container} onPress={handlePress} activeOpacity={0.7}>
       <Text style={styles.date}>{formatDate(record.createdAt)}</Text>
       <View style={styles.kebabInfoContainer}>
         <Text style={styles.kebabInfo}>
-          {getKebabEmoji(record.kebabType)}{' '}
-          {getKebabTypeLabel(record.kebabType)}
+          {getKebabEmoji(record.kebabType)} {getKebabTypeLabel(record.kebabType)}
         </Text>
         <Text style={styles.kebabDetail}>
-          {getMeatTypeLabel(record.meatType)} •{' '}
-          {getSauceTypeLabel(record.sauceType)} •{' '}
+          {getMeatTypeLabel(record.meatType)} • {getSauceTypeLabel(record.sauceType)} •{' '}
           {getSizeLabel(record.size)}
         </Text>
       </View>

@@ -22,12 +22,15 @@ export const formatMonthYear = (dateString: string): string => {
 export const groupByMonth = <T extends { createdAt: string }>(
   items: T[]
 ): { [key: string]: T[] } => {
-  return items.reduce((acc, item) => {
-    const monthYear = formatMonthYear(item.createdAt)
-    if (!acc[monthYear]) {
-      acc[monthYear] = []
-    }
-    acc[monthYear].push(item)
-    return acc
-  }, {} as { [key: string]: T[] })
+  return items.reduce(
+    (acc, item) => {
+      const monthYear = formatMonthYear(item.createdAt)
+      if (!acc[monthYear]) {
+        acc[monthYear] = []
+      }
+      acc[monthYear].push(item)
+      return acc
+    },
+    {} as { [key: string]: T[] }
+  )
 }

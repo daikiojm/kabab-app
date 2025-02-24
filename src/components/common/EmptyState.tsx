@@ -10,19 +10,13 @@ type EmptyStateProps = {
   emoji?: string
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
-  title,
-  description,
-  emoji,
-}) => {
+export const EmptyState: React.FC<EmptyStateProps> = ({ title, description, emoji }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
         {title} {emoji}
       </Text>
-      {description && (
-        <Text style={styles.description}>{description}</Text>
-      )}
+      {description && <Text style={styles.description}>{description}</Text>}
     </View>
   )
 }

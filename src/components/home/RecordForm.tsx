@@ -5,12 +5,7 @@ import { KebabType, MeatType, SauceType, Size } from '../../types/record'
 import { spacing, radius } from '../../styles/spacing'
 import { colors } from '../../styles/colors'
 import { typography } from '../../styles/typography'
-import {
-  KebabTypeSelector,
-  MeatTypeSelector,
-  SauceTypeSelector,
-  SizeSelector,
-} from './selectors'
+import { KebabTypeSelector, MeatTypeSelector, SauceTypeSelector, SizeSelector } from './selectors'
 
 type RecordFormProps = {
   mode?: 'create' | 'edit'
@@ -58,12 +53,13 @@ export const RecordForm: React.FC<RecordFormProps> = ({
       size,
     }
 
-    const result = mode === 'create'
-      ? await addRecord(input)
-      : await updateRecord(recordId!, input)
+    const result = mode === 'create' ? await addRecord(input) : await updateRecord(recordId!, input)
 
     if (result.success) {
-      Alert.alert('成功', mode === 'create' ? 'ケバブの記録を保存しました！' : 'ケバブの記録を更新しました！')
+      Alert.alert(
+        '成功',
+        mode === 'create' ? 'ケバブの記録を保存しました！' : 'ケバブの記録を更新しました！'
+      )
       if (mode === 'create') {
         setKebabType('')
         setMeatType('')
@@ -77,44 +73,26 @@ export const RecordForm: React.FC<RecordFormProps> = ({
   }
 
   const isFormValid = kebabType && meatType && sauceType && size
-  const hasChanges = mode === 'create' || (
-    initialValues && (
-      kebabType !== initialValues.kebabType ||
-      meatType !== initialValues.meatType ||
-      sauceType !== initialValues.sauceType ||
-      size !== initialValues.size
-    )
-  )
+  const hasChanges =
+    mode === 'create' ||
+    (initialValues &&
+      (kebabType !== initialValues.kebabType ||
+        meatType !== initialValues.meatType ||
+        sauceType !== initialValues.sauceType ||
+        size !== initialValues.size))
 
   return (
     <View style={styles.container}>
-      <KebabTypeSelector
-        value={kebabType}
-        onSelect={setKebabType}
-      />
-      <MeatTypeSelector
-        value={meatType}
-        onSelect={setMeatType}
-      />
-      <SauceTypeSelector
-        value={sauceType}
-        onSelect={setSauceType}
-      />
-      <SizeSelector
-        value={size}
-        onSelect={setSize}
-      />
+      <KebabTypeSelector value={kebabType} onSelect={setKebabType} />
+      <MeatTypeSelector value={meatType} onSelect={setMeatType} />
+      <SauceTypeSelector value={sauceType} onSelect={setSauceType} />
+      <SizeSelector value={size} onSelect={setSize} />
       <TouchableOpacity
-        style={[
-          styles.submitButton,
-          (!isFormValid || !hasChanges) && styles.submitButtonDisabled,
-        ]}
+        style={[styles.submitButton, (!isFormValid || !hasChanges) && styles.submitButtonDisabled]}
         onPress={handleSubmit}
         disabled={!isFormValid || !hasChanges}
       >
-        <Text style={styles.submitButtonText}>
-          {mode === 'create' ? '記録する' : '保存する'}
-        </Text>
+        <Text style={styles.submitButtonText}>{mode === 'create' ? '記録する' : '保存する'}</Text>
       </TouchableOpacity>
     </View>
   )

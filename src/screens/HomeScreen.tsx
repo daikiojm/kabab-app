@@ -10,7 +10,15 @@
  * @see {@link Header} コンポーネントのドキュメントも参照してください
  */
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Platform } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Platform,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
@@ -108,11 +116,7 @@ export const HomeScreen = () => {
         handleIndicatorStyle={styles.handleIndicator}
         backgroundStyle={styles.bottomSheetBackground}
         backdropComponent={(props) => (
-          <BottomSheetBackdrop
-            {...props}
-            disappearsOnIndex={-1}
-            appearsOnIndex={0}
-          />
+          <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
         )}
       >
         <BottomSheetView style={styles.contentContainer}>
@@ -159,17 +163,19 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     borderRadius: radius.md,
     elevation: 3,
-    ...(Platform.OS === 'web' ? {
-      boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.25)',
-    } : {
-      shadowColor: colors.text.primary,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-    }),
+    ...(Platform.OS === 'web'
+      ? {
+          boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.25)',
+        }
+      : {
+          shadowColor: colors.text.primary,
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+        }),
     width: '80%',
     alignSelf: 'center',
   },

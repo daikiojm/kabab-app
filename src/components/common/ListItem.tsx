@@ -24,24 +24,15 @@ export const ListItem: React.FC<ListItemProps> = ({
   const Container = onPress ? TouchableOpacity : View
 
   return (
-    <Container
-      style={[
-        styles.container,
-        highlighted && styles.highlighted,
-      ]}
-      onPress={onPress}
-    >
+    <Container style={[styles.container, highlighted && styles.highlighted]} onPress={onPress}>
       <View style={styles.mainContent}>
         <Text style={styles.title}>
-          {emoji && `${emoji} `}{title}
+          {emoji && `${emoji} `}
+          {title}
         </Text>
-        {subtitle && (
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        )}
+        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       </View>
-      {rightText && (
-        <Text style={styles.rightText}>{rightText}</Text>
-      )}
+      {rightText && <Text style={styles.rightText}>{rightText}</Text>}
     </Container>
   )
 }

@@ -30,19 +30,12 @@ export const Selector = <T extends string>({
         {options.map((option) => (
           <TouchableOpacity
             key={option.value}
-            style={[
-              styles.optionButton,
-              value === option.value && styles.optionButtonSelected,
-            ]}
+            style={[styles.optionButton, value === option.value && styles.optionButtonSelected]}
             onPress={() => onSelect(option.value)}
           >
-            <Text
-              style={[
-                styles.optionText,
-                value === option.value && styles.optionTextSelected,
-              ]}
-            >
-              {option.emoji && `${option.emoji} `}{option.label}
+            <Text style={[styles.optionText, value === option.value && styles.optionTextSelected]}>
+              {option.emoji && `${option.emoji} `}
+              {option.label}
             </Text>
           </TouchableOpacity>
         ))}
