@@ -13,15 +13,28 @@ import {
 } from './selectors'
 
 type RecordFormProps = {
+  mode?: 'create' | 'edit'
+  recordId?: string
+  initialValues?: {
+    kebabType: KebabType
+    meatType: MeatType
+    sauceType: SauceType
+    size: Size
+  }
   onComplete?: () => void
 }
 
-export const RecordForm: React.FC<RecordFormProps> = ({ onComplete }) => {
-  const { addRecord } = useKebabRecords()
-  const [kebabType, setKebabType] = useState<KebabType | ''>('')
-  const [meatType, setMeatType] = useState<MeatType | ''>('')
-  const [sauceType, setSauceType] = useState<SauceType | ''>('')
-  const [size, setSize] = useState<Size | ''>('')
+export const RecordForm: React.FC<RecordFormProps> = ({
+  mode = 'create',
+  recordId,
+  initialValues,
+  onComplete,
+}) => {
+  const { addRecord, updateRecord } = useKebabRecords()
+  const [kebabType, setKebabType] = useState<KebabType | ''>(initialValues?.kebabType || '')
+  const [meatType, setMeatType] = useState<MeatType | ''>(initialValues?.meatType || '')
+  const [sauceType, setSauceType] = useState<SauceType | ''>(initialValues?.sauceType || '')
+  const [size, setSize] = useState<Size | ''>(initialValues?.size || '')
 
   const handleSubmit = async () => {
     if (!kebabType || !meatType || !sauceType || !size) {
@@ -29,19 +42,25 @@ export const RecordForm: React.FC<RecordFormProps> = ({ onComplete }) => {
       return
     }
 
-    const result = await addRecord({
+    const input = {
       kebabType,
       meatType,
       sauceType,
       size,
-    })
+    }
+
+    const result = mode === 'create'
+      ? await addRecord(input)
+      : await updateRecord(recordId!, input)
 
     if (result.success) {
-      Alert.alert('成功', 'ケバブの記録を保存しました！')
-      setKebabType('')
-      setMeatType('')
-      setSauceType('')
-      setSize('')
+      Alert.alert('成功', mode === 'create' ? 'ケバブの記録を保存しました！' : 'ケバブの記録を更新しました！')
+      if (mode === 'create') {
+        setKebabType('')
+        setMeatType('')
+        setSauceType('')
+        setSize('')
+      }
       onComplete?.()
     } else {
       Alert.alert('エラー', result.error)
@@ -49,6 +68,14 @@ export const RecordForm: React.FC<RecordFormProps> = ({ onComplete }) => {
   }
 
   const isFormValid = kebabType && meatType && sauceType && size
+  const hasChanges = mode === 'create' || (
+    initialValues && (
+      kebabType !== initialValues.kebabType ||
+      meatType !== initialValues.meatType ||
+      sauceType !== initialValues.sauceType ||
+      size !== initialValues.size
+    )
+  )
 
   return (
     <View style={styles.container}>
@@ -71,12 +98,14 @@ export const RecordForm: React.FC<RecordFormProps> = ({ onComplete }) => {
       <TouchableOpacity
         style={[
           styles.submitButton,
-          !isFormValid && styles.submitButtonDisabled,
+          (!isFormValid || !hasChanges) && styles.submitButtonDisabled,
         ]}
         onPress={handleSubmit}
-        disabled={!isFormValid}
+        disabled={!isFormValid || !hasChanges}
       >
-        <Text style={styles.submitButtonText}>記録する</Text>
+        <Text style={styles.submitButtonText}>
+          {mode === 'create' ? '記録する' : '保存する'}
+        </Text>
       </TouchableOpacity>
     </View>
   )

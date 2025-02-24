@@ -1,18 +1,25 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback, useRef, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { RootStackNavigationProp } from '../types/navigation'
 import { BottomNavigation } from '../components/BottomNavigation'
 import { useKebabRecords } from '../hooks/useKebabRecords'
-import { formatDate, formatTime, groupByMonth } from '../utils/date'
-
-const getKebabEmoji = (kebabType: string): string => {
-  return kebabType === 'kebab' ? '🥙' : '🍚'
-}
+import { groupByMonth } from '../utils/date'
+import { KebabHistoryItem } from '../components/history/KebabHistoryItem'
+import { MonthlyGroup } from '../components/history/MonthlyGroup'
+import { RecordForm } from '../components/home/RecordForm'
+import { colors } from '../styles/colors'
+import { spacing } from '../styles/spacing'
+import { typography } from '../styles/typography'
+import { KebabRecord } from '../types/record'
 
 export const HistoryScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
   const { records } = useKebabRecords()
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const [selectedRecord, setSelectedRecord] = useState<KebabRecord | null>(null)
+  const snapPoints = useMemo(() => ['65%', '90%'], [])
 
   const groupedRecords = useMemo(() => {
     const sorted = [...records].sort(
@@ -21,8 +28,18 @@ export const HistoryScreen = () => {
     return groupByMonth(sorted)
   }, [records])
 
+  const handleRecordPress = useCallback((record: KebabRecord) => {
+    setSelectedRecord(record)
+    bottomSheetRef.current?.snapToIndex(0)
+  }, [])
+
+  const handleEditComplete = useCallback(() => {
+    bottomSheetRef.current?.close()
+    setSelectedRecord(null)
+  }, [])
+
   return (
-    <>
+    <View style={styles.root}>
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.header}>
@@ -30,121 +47,125 @@ export const HistoryScreen = () => {
           </View>
 
           {Object.entries(groupedRecords).map(([month, monthRecords]) => (
-            <View key={month} style={styles.monthGroup}>
-              <Text style={styles.monthTitle}>{month}</Text>
+            <MonthlyGroup key={month} month={month}>
               {monthRecords.map((record) => (
-                <View key={record.id} style={styles.historyItem}>
-                  <Text style={styles.date}>{formatDate(record.createdAt)}</Text>
-                  <View style={styles.kebabInfoContainer}>
-                    <Text style={styles.kebabInfo}>
-                      {getKebabEmoji(record.kebabType)}{' '}
-                      {record.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}
-                    </Text>
-                    <Text style={styles.kebabDetail}>
-                      {record.meatType === 'chicken'
-                        ? 'チキン'
-                        : record.meatType === 'beef'
-                        ? 'ビーフ'
-                        : 'ミックス'}{' '}
-                      •{' '}
-                      {record.sauceType === 'mild'
-                        ? 'マイルド'
-                        : record.sauceType === 'hot'
-                        ? 'ホット'
-                        : 'ミックス'}{' '}
-                      • {record.size === 'regular' ? '普通' : '大盛り'}
-                    </Text>
-                  </View>
-                  <Text style={styles.time}>{formatTime(record.createdAt)}</Text>
-                </View>
+                <KebabHistoryItem
+                  key={record.id}
+                  record={record}
+                  onPress={handleRecordPress}
+                />
               ))}
-            </View>
+            </MonthlyGroup>
           ))}
 
           {records.length === 0 && (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
                 まだケバブの記録がありません 🥙
               </Text>
-              <Text style={styles.emptyStateSubText}>
+              <Text style={styles.emptySubText}>
                 ホーム画面から記録を追加してみましょう！
               </Text>
             </View>
           )}
         </ScrollView>
       </SafeAreaView>
-      <BottomNavigation />
-    </>
+
+      <View style={styles.bottomNavigation}>
+        <BottomNavigation />
+      </View>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        enablePanDownToClose
+        handleIndicatorStyle={styles.handleIndicator}
+        backgroundStyle={styles.bottomSheetBackground}
+        style={styles.bottomSheet}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            disappearsOnIndex={-1}
+            appearsOnIndex={0}
+            opacity={0.5}
+          />
+        )}
+      >
+        <BottomSheetView>
+          {selectedRecord && (
+            <>
+              <Text style={styles.editTitle}>記録を編集</Text>
+              <RecordForm
+                mode="edit"
+                recordId={selectedRecord.id}
+                initialValues={{
+                  kebabType: selectedRecord.kebabType,
+                  meatType: selectedRecord.meatType,
+                  sauceType: selectedRecord.sauceType,
+                  size: selectedRecord.size,
+                }}
+                onComplete={handleEditComplete}
+              />
+            </>
+          )}
+        </BottomSheetView>
+      </BottomSheet>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  emptyState: {
-    padding: 20,
-    alignItems: 'center',
-    marginTop: 40,
-  },
-  emptyStateText: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 8,
-  },
-  emptyStateSubText: {
-    fontSize: 14,
-    color: '#999',
+  root: {
+    flex: 1,
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   scrollView: {
     flex: 1,
   },
   header: {
-    padding: 20,
-    paddingTop: 40,
-    backgroundColor: '#fff',
+    padding: spacing.md,
+    paddingTop: spacing.xl,
+    backgroundColor: colors.background,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...typography.heading.h1,
   },
-  monthGroup: {
-    marginBottom: 20,
-    paddingHorizontal: 20,
-  },
-  monthTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-    color: '#666',
-  },
-  historyItem: {
-    flexDirection: 'row',
+  emptyContainer: {
+    padding: spacing.md,
     alignItems: 'center',
-    padding: 15,
-    backgroundColor: '#f8f8f8',
-    borderRadius: 10,
-    marginBottom: 10,
+    marginTop: spacing.xl,
   },
-  date: {
-    fontSize: 16,
-    marginRight: 10,
+  emptyText: {
+    ...typography.body.large,
+    color: colors.text.secondary,
+    marginBottom: spacing.sm,
   },
-  kebabInfoContainer: {
-    flex: 1,
-    marginHorizontal: 10,
+  emptySubText: {
+    ...typography.body.medium,
+    color: colors.text.disabled,
   },
-  kebabInfo: {
-    fontSize: 16,
-    marginBottom: 4,
+  handleIndicator: {
+    backgroundColor: colors.text.disabled,
+    width: 40,
+    height: 4,
   },
-  kebabDetail: {
-    fontSize: 12,
-    color: '#666',
+  bottomSheetBackground: {
+    backgroundColor: colors.background,
   },
-  time: {
-    fontSize: 14,
-    color: '#666',
+  bottomSheet: {
+    zIndex: 2,
+  },
+  bottomNavigation: {
+    zIndex: 1,
+  },
+  editTitle: {
+    ...typography.heading.h2,
+    textAlign: 'center',
+    marginVertical: spacing.md,
   },
 })

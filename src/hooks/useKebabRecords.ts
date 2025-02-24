@@ -98,6 +98,47 @@ export const useKebabRecords = () => {
     }
   }, [records, calculateStats])
 
+  const updateRecord = useCallback(async (id: string, input: KebabRecordInput) => {
+    try {
+      // バリデーション
+      kebabRecordSchema.parse(input)
+
+      const recordIndex = records.findIndex(r => r.id === id)
+      if (recordIndex === -1) {
+        return {
+          success: false as const,
+          error: '指定されたレコードが見つかりませんでした',
+        }
+      }
+
+      const updatedRecord: KebabRecord = {
+        ...records[recordIndex],
+        ...input,
+      }
+
+      const updatedRecords = [...records]
+      updatedRecords[recordIndex] = updatedRecord
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedRecords))
+      setRecords(updatedRecords)
+      calculateStats(updatedRecords)
+
+      // 通知を作成
+      await addNotification({
+        type: 'record',
+        title: '記録を更新',
+        message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}の記録を更新しました！`,
+      })
+
+      return { success: true as const }
+    } catch (error) {
+      console.error('Error updating record:', error)
+      return {
+        success: false as const,
+        error: error instanceof Error ? error.message : '不明なエラーが発生しました',
+      }
+    }
+  }, [records, calculateStats, addNotification])
+
   const clearRecords = useCallback(async () => {
     try {
       await AsyncStorage.removeItem(STORAGE_KEY)
@@ -121,5 +162,6 @@ export const useKebabRecords = () => {
     addRecord,
     clearRecords,
     loadRecords,
+    updateRecord,
   }
 }

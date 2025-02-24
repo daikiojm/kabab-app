@@ -8,22 +8,17 @@ import { KebabHistoryItem } from './KebabHistoryItem'
 
 type MonthlyGroupProps = {
   month: string
-  records: KebabRecord[]
+  children: React.ReactNode
 }
 
 export const MonthlyGroup: React.FC<MonthlyGroupProps> = ({
   month,
-  records,
+  children,
 }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.monthTitle}>{month}</Text>
-      {records.map((record) => (
-        <KebabHistoryItem
-          key={record.id}
-          record={record}
-        />
-      ))}
+      {children}
     </View>
   )
 }

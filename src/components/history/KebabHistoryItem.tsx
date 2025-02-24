@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { colors } from '../../styles/colors'
 import { spacing, radius } from '../../styles/spacing'
 import { typography } from '../../styles/typography'
@@ -15,13 +15,23 @@ import {
 
 type KebabHistoryItemProps = {
   record: KebabRecord
+  onPress?: (record: KebabRecord) => void
 }
 
 export const KebabHistoryItem: React.FC<KebabHistoryItemProps> = ({
   record,
+  onPress,
 }) => {
+  const handlePress = () => {
+    onPress?.(record)
+  }
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={handlePress}
+      activeOpacity={0.7}
+    >
       <Text style={styles.date}>{formatDate(record.createdAt)}</Text>
       <View style={styles.kebabInfoContainer}>
         <Text style={styles.kebabInfo}>
@@ -35,7 +45,7 @@ export const KebabHistoryItem: React.FC<KebabHistoryItemProps> = ({
         </Text>
       </View>
       <Text style={styles.time}>{formatTime(record.createdAt)}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
