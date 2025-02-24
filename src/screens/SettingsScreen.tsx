@@ -1,15 +1,22 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, SafeAreaView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { HeaderBackButton } from '@react-navigation/elements'
 import { RootStackNavigationProp } from '../types/navigation'
 import { useKebabRecords } from '../hooks/useKebabRecords'
 import { useNotifications } from '../hooks/useNotifications'
+import { ReminderTimeSheet } from '../components/settings/ReminderTimeSheet'
 
 export const SettingsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
   const { clearRecords } = useKebabRecords()
-  const { enabled: notificationsEnabled, toggleNotifications } = useNotifications()
+  const {
+    enabled: notificationsEnabled,
+    reminder,
+    toggleNotifications,
+    toggleReminder,
+    updateReminderTime,
+  } = useNotifications()
 
   const handleResetHistory = () => {
     Alert.alert(
@@ -32,39 +39,77 @@ export const SettingsScreen = () => {
     )
   }
 
+  const [isTimeSheetVisible, setIsTimeSheetVisible] = useState(false)
+
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <HeaderBackButton onPress={() => navigation.goBack()} />
-          <Text style={styles.title}>⚙️ 設定</Text>
-        </View>
-        <View style={styles.content}>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>通知</Text>
-            <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
-              <Switch
-                value={notificationsEnabled}
-                onValueChange={(value) => toggleNotifications(value)}
-              />
-            </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <HeaderBackButton onPress={() => navigation.goBack()} />
+        <Text style={styles.title}>⚙️ 設定</Text>
+      </View>
+      <View style={styles.content}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>通知</Text>
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>通知を有効にする</Text>
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={(value) => toggleNotifications(value)}
+            />
           </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>データ管理</Text>
-            <TouchableOpacity style={styles.dangerButton} onPress={handleResetHistory}>
-              <Text style={styles.dangerButtonText}>履歴をリセット</Text>
+          <View style={styles.settingItem}>
+            <Text style={styles.settingLabel}>毎日のケバブ記録リマインダー</Text>
+            <Switch
+              value={reminder.enabled}
+              onValueChange={(value) => toggleReminder(value)}
+              disabled={!notificationsEnabled}
+            />
+          </View>
+
+          {notificationsEnabled && reminder.enabled && (
+            <TouchableOpacity
+              style={styles.timeSettingButton}
+              onPress={() => setIsTimeSheetVisible(true)}
+            >
+              <Text style={styles.timeSettingLabel}>リマインド時刻: {reminder.time}</Text>
+              <Text style={styles.timeSettingHint}>タップして変更</Text>
             </TouchableOpacity>
-          </View>
+          )}
         </View>
-      </SafeAreaView>
-    </>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>データ管理</Text>
+          <TouchableOpacity style={styles.dangerButton} onPress={handleResetHistory}>
+            <Text style={styles.dangerButtonText}>履歴をリセット</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <ReminderTimeSheet
+        isVisible={isTimeSheetVisible}
+        onClose={() => setIsTimeSheetVisible(false)}
+        onSubmit={updateReminderTime}
+        initialTime={reminder.time}
+      />
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  timeSettingButton: {
+    backgroundColor: '#f8f8f8',
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 8,
+  },
+  timeSettingLabel: {
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  timeSettingHint: {
+    fontSize: 12,
+    color: '#666',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
