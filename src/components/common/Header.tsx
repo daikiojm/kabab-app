@@ -1,5 +1,28 @@
+/**
+ * ヘッダーコンポーネント
+ * 
+ * @important
+ * ノッチ付きデバイスでのレイアウトずれに注意
+ * - SafeAreaView と組み合わせて使用する場合、適切なパディングの設定が必要
+ * - useSafeAreaInsets を使用してデバイスに応じたパディングを設定することを推奨
+ * - レイアウトの変更時は、様々なデバイスでの表示確認を推奨
+ * 
+ * @example
+ * // 推奨される使用方法
+ * import { useSafeAreaInsets } from 'react-native-safe-area-context';
+ * 
+ * const Component = () => {
+ *   const insets = useSafeAreaInsets();
+ *   return (
+ *     <Header
+ *       title="タイトル"
+ *       containerStyle={{ paddingTop: insets.top + spacing.sm }}
+ *     />
+ *   );
+ * };
+ */
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native'
 import { HeaderBackButton } from '@react-navigation/elements'
 import { colors } from '../../styles/colors'
 import { spacing } from '../../styles/spacing'
@@ -12,6 +35,7 @@ type HeaderProps = {
   onBack?: () => void
   rightIcon?: string
   onRightIconPress?: () => void
+  containerStyle?: StyleProp<ViewStyle>
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -21,9 +45,10 @@ export const Header: React.FC<HeaderProps> = ({
   onBack,
   rightIcon,
   onRightIconPress,
+  containerStyle,
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {showBack && <HeaderBackButton onPress={onBack} />}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>
