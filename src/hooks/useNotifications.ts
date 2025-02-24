@@ -2,6 +2,30 @@ import { Alert } from 'react-native'
 import { useState, useEffect, useCallback } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Notification, NotificationState, DEFAULT_REMINDER_SETTINGS } from '../types/notification'
+
+type OperationResult<T = undefined> = 
+  | { success: true; data?: T }
+  | { success: false; error: string }
+
+type ReminderNotificationConfig = {
+  title: string
+  body: string
+  sound: boolean
+  badge: number
+  data: {
+    type: string
+    action: string
+  }
+}
+
+import { SchedulableTriggerInputTypes } from 'expo-notifications'
+
+type ReminderScheduleConfig = {
+  type: SchedulableTriggerInputTypes.CALENDAR
+  hour: number
+  minute: number
+  repeats: boolean
+}
 import {
   scheduleNotification,
   cancelNotification,
@@ -22,7 +46,7 @@ const DEFAULT_STATE: NotificationState = {
 export const useNotifications = () => {
   const [state, setState] = useState<NotificationState>(DEFAULT_STATE)
 
-  const loadNotifications = useCallback(async () => {
+  const loadNotifications = useCallback(async (): Promise<OperationResult> => {
     try {
       const [notificationsJson, settingsJson, reminderJson] = await Promise.all([
         AsyncStorage.getItem(STORAGE_KEY),
@@ -42,13 +66,18 @@ export const useNotifications = () => {
         enabled: settings.enabled,
         reminder,
       }))
+      return { success: true }
     } catch (e) {
       console.error('Error loading notifications:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '通知の読み込み中にエラーが発生しました'
+      }
     }
   }, [])
 
   const addNotification = useCallback(
-    async (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>) => {
+    async (notification: Omit<Notification, 'id' | 'createdAt' | 'read'>): Promise<OperationResult<Notification>> => {
       try {
         const newNotification: Notification = {
           id: Date.now().toString(),
@@ -63,14 +92,19 @@ export const useNotifications = () => {
           ...prev,
           notifications: updatedNotifications,
         }))
+        return { success: true, data: newNotification }
       } catch (e) {
         console.error('Error adding notification:', e)
+        return {
+          success: false,
+          error: e instanceof Error ? e.message : '通知の追加中にエラーが発生しました'
+        }
       }
     },
     [state.notifications]
   )
 
-  const markAsRead = useCallback(async (id: string) => {
+  const markAsRead = useCallback(async (id: string): Promise<OperationResult> => {
     try {
       const updatedNotifications = state.notifications.map((notification: Notification) =>
         notification.id === id ? { ...notification, read: true } : notification
@@ -80,24 +114,34 @@ export const useNotifications = () => {
         ...prev,
         notifications: updatedNotifications,
       }))
+      return { success: true }
     } catch (e) {
       console.error('Error marking notification as read:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '通知の既読設定中にエラーが発生しました'
+      }
     }
   }, [state.notifications])
 
-  const clearNotifications = useCallback(async () => {
+  const clearNotifications = useCallback(async (): Promise<OperationResult> => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]))
       setState((prev: NotificationState) => ({
         ...prev,
         notifications: [],
       }))
+      return { success: true }
     } catch (e) {
       console.error('Error clearing notifications:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '通知のクリア中にエラーが発生しました'
+      }
     }
   }, [])
 
-  const scheduleReminderNotification = async (time: string) => {
+  const scheduleReminderNotification = async (time: string): Promise<OperationResult<string>> => {
     try {
       // 既存のリマインダーをキャンセル
       if (state.reminder.notificationId) {
@@ -105,23 +149,25 @@ export const useNotifications = () => {
       }
 
       const [hours, minutes] = time.split(':').map(Number)
-      const notificationId = await scheduleNotification(
-        {
-          title: '🥙 ケバブの記録をお忘れなく',
-          body: '今日のケバブ記録はもうつけましたか？',
-          sound: true,
-          badge: 1,
-          data: {
-            type: 'reminder',
-            action: 'record',
-          },
+      const config: ReminderNotificationConfig = {
+        title: '🥙 ケバブの記録をお忘れなく',
+        body: '今日のケバブ記録はもうつけましたか？',
+        sound: true,
+        badge: 1,
+        data: {
+          type: 'reminder',
+          action: 'record',
         },
-        {
-          hour: hours,
-          minute: minutes,
-          repeats: true,
-        }
-      )
+      }
+
+      const schedule: ReminderScheduleConfig = {
+        type: SchedulableTriggerInputTypes.CALENDAR,
+        hour: hours,
+        minute: minutes,
+        repeats: true,
+      }
+
+      const notificationId = await scheduleNotification(config, schedule)
 
       const updatedReminder = {
         ...state.reminder,
@@ -134,17 +180,25 @@ export const useNotifications = () => {
         ...prev,
         reminder: updatedReminder,
       }))
+      return { success: true, data: notificationId }
     } catch (e) {
       console.error('Error scheduling reminder:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : 'リマインダーのスケジュール設定中にエラーが発生しました'
+      }
     }
   }
 
-  const toggleNotifications = useCallback(async (enabled: boolean) => {
+  const toggleNotifications = useCallback(async (enabled: boolean): Promise<OperationResult> => {
     try {
       if (enabled) {
         const permissionGranted = await requestNotificationPermissions()
         if (!permissionGranted) {
-          return
+          return {
+            success: false,
+            error: '通知の権限が付与されませんでした'
+          }
         }
       }
 
@@ -171,17 +225,25 @@ export const useNotifications = () => {
         enabled,
         reminder: updatedReminder,
       }))
+      return { success: true }
     } catch (e) {
       console.error('Error toggling notifications:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : '通知設定の更新中にエラーが発生しました'
+      }
     }
   }, [state.reminder])
 
-  const toggleReminder = useCallback(async (enabled: boolean) => {
+  const toggleReminder = useCallback(async (enabled: boolean): Promise<OperationResult> => {
     try {
       // 通知が無効の場合は、リマインダーを有効にできない
       if (!state.enabled) {
         Alert.alert('エラー', '通知を有効にしてください')
-        return
+        return {
+          success: false,
+          error: '通知が無効のため、リマインダーを設定できません'
+        }
       }
 
       const updatedReminder = {
@@ -204,13 +266,18 @@ export const useNotifications = () => {
         ...prev,
         reminder: updatedReminder,
       }))
+      return { success: true }
     } catch (e) {
       console.error('Error toggling reminder:', e)
       Alert.alert('エラー', 'リマインダーの設定に失敗しました')
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : 'リマインダー設定の更新中にエラーが発生しました'
+      }
     }
   }, [state.reminder, state.enabled])
 
-  const updateReminderTime = useCallback(async (time: string) => {
+  const updateReminderTime = useCallback(async (time: string): Promise<OperationResult> => {
     try {
       const updatedReminder = {
         ...state.reminder,
@@ -230,8 +297,13 @@ export const useNotifications = () => {
         ...prev,
         reminder: updatedReminder,
       }))
+      return { success: true }
     } catch (e) {
       console.error('Error updating reminder time:', e)
+      return {
+        success: false,
+        error: e instanceof Error ? e.message : 'リマインダー時刻の更新中にエラーが発生しました'
+      }
     }
   }, [state.reminder, state.enabled])
 

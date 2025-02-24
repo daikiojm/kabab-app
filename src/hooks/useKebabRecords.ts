@@ -3,12 +3,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { KebabRecord, KebabRecordInput } from '../types/record'
 import { useNotifications } from './useNotifications'
 import { kebabRecordSchema } from '../schemas/record'
+import { ZodError } from 'zod'
 
 const STORAGE_KEY = '@kebab_records'
 
 export interface KebabStats {
   consecutiveDays: number
   totalCount: number
+}
+
+type OperationResult<T = undefined> = 
+  | { success: true; data?: T }
+  | { success: false; error: string }
+
+type StorageData = {
+  records: KebabRecord[]
+  version: number
 }
 
 export const useKebabRecords = () => {
@@ -19,16 +29,24 @@ export const useKebabRecords = () => {
     totalCount: 0,
   })
 
-  const loadRecords = useCallback(async () => {
+  const loadRecords = useCallback(async (): Promise<OperationResult> => {
     try {
       const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
       if (jsonValue != null) {
-        const loadedRecords = JSON.parse(jsonValue) as KebabRecord[]
+        const data = JSON.parse(jsonValue) as StorageData | KebabRecord[]
+        // 古い形式のデータ互換性対応
+        const loadedRecords = Array.isArray(data) ? data : data.records
         setRecords(loadedRecords)
         calculateStats(loadedRecords)
+        return { success: true }
       }
+      return { success: true }
     } catch (e) {
       console.error('Error loading records:', e)
+      return { 
+        success: false, 
+        error: e instanceof Error ? e.message : '記録の読み込み中にエラーが発生しました'
+      }
     }
   }, [])
 
@@ -65,7 +83,7 @@ export const useKebabRecords = () => {
     })
   }, [])
 
-  const addRecord = useCallback(async (input: KebabRecordInput) => {
+  const addRecord = useCallback(async (input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
     try {
       // バリデーション
       kebabRecordSchema.parse(input)
@@ -88,7 +106,7 @@ export const useKebabRecords = () => {
         message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}を記録しました！`,
       })
 
-      return { success: true as const }
+      return { success: true, data: newRecord }
     } catch (error) {
       console.error('Error adding record:', error)
       return {
@@ -98,7 +116,7 @@ export const useKebabRecords = () => {
     }
   }, [records, calculateStats])
 
-  const updateRecord = useCallback(async (id: string, input: KebabRecordInput) => {
+  const updateRecord = useCallback(async (id: string, input: KebabRecordInput): Promise<OperationResult<KebabRecord>> => {
     try {
       // バリデーション
       kebabRecordSchema.parse(input)
@@ -129,7 +147,7 @@ export const useKebabRecords = () => {
         message: `${input.kebabType === 'kebab' ? 'ケバブ' : 'ケバブ丼'}の記録を更新しました！`,
       })
 
-      return { success: true as const }
+      return { success: true, data: updatedRecord }
     } catch (error) {
       console.error('Error updating record:', error)
       return {
@@ -139,7 +157,7 @@ export const useKebabRecords = () => {
     }
   }, [records, calculateStats, addNotification])
 
-  const clearRecords = useCallback(async () => {
+  const clearRecords = useCallback(async (): Promise<OperationResult> => {
     try {
       await AsyncStorage.removeItem(STORAGE_KEY)
       setRecords([])
@@ -147,8 +165,13 @@ export const useKebabRecords = () => {
         consecutiveDays: 0,
         totalCount: 0,
       })
+      return { success: true }
     } catch (e) {
       console.error('Error clearing records:', e)
+      return { 
+        success: false, 
+        error: e instanceof Error ? e.message : '記録のクリア中にエラーが発生しました'
+      }
     }
   }, [])
 

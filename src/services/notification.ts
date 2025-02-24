@@ -1,4 +1,5 @@
 import * as Notifications from 'expo-notifications'
+import { NotificationTriggerInput } from 'expo-notifications'
 
 interface NotificationConfig {
   title: string
@@ -17,7 +18,7 @@ export const requestNotificationPermissions = async (): Promise<boolean> => {
 // 通知のスケジューリング
 export const scheduleNotification = async (
   config: NotificationConfig,
-  trigger: any
+  trigger: NotificationTriggerInput
 ): Promise<string> => {
   return await Notifications.scheduleNotificationAsync({
     content: {
@@ -37,22 +38,24 @@ export const cancelNotification = async (identifier: string): Promise<void> => {
 }
 
 // 通知設定の取得
-export const getNotificationSettings = async () => {
+export const getNotificationSettings = async (): Promise<Notifications.NotificationPermissionsStatus> => {
   return await Notifications.getPermissionsAsync()
 }
 
 // 通知ハンドラーの設定
-export const setNotificationHandler = (handler: (notification: any) => void) => {
+export const setNotificationHandler = (
+  handler: (response: Notifications.NotificationResponse) => void
+) => {
   Notifications.addNotificationResponseReceivedListener(handler)
 }
 
 // バッジ数の更新
-export const setBadgeCount = async (count: number) => {
+export const setBadgeCount = async (count: number): Promise<void> => {
   await Notifications.setBadgeCountAsync(count)
 }
 
 // 通知の初期設定
-export const initializeNotifications = () => {
+export const initializeNotifications = (): void => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
