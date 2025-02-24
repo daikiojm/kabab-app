@@ -42,8 +42,9 @@ export default function App() {
         <NavigationContainer
           ref={navigationRef}
           linking={{
-            prefixes: [],
+            prefixes: ['https://daikiojm.github.io/kabab-app'],
             config: {
+              initialRouteName: 'Home',
               screens: {
                 Home: '',
                 History: 'history',

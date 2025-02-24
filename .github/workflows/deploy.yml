@@ -3,10 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # メインブランチにプッシュされた時に実行
+      - main
 
 permissions:
-  contents: write # GitHub Pages へのデプロイに必要な権限
+  contents: write
 
 jobs:
   deploy:
