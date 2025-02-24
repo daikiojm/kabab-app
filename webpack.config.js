@@ -3,7 +3,7 @@ const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 module.exports = async function (env, argv) {
   const config = await createExpoWebpackConfigAsync({
     ...env,
-    publicPath: '/kabab-app/'
+    publicPath: '/kabab-app/static/'
   }, argv);
   
   // Polyfill for crypto module
