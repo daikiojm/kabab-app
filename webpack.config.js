@@ -1,13 +1,13 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config')
 
 module.exports = async function (env, argv) {
-  const config = await createExpoWebpackConfigAsync(
-    {
-      ...env,
-      publicPath: '/kabab-app/',
-    },
-    argv
-  )
+  const config = await createExpoWebpackConfigAsync(env, argv)
+
+  // Set public path for GitHub Pages
+  config.output = {
+    ...config.output,
+    publicPath: '/kabab-app/',
+  }
 
   // Polyfill for crypto module
   config.resolve = {
