@@ -43,8 +43,22 @@ export default function App() {
             contentStyle: { backgroundColor: '#fff' },
           }}
         >
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Screen 
+            name="Home" 
+            component={HomeScreen}
+            options={{
+              gestureEnabled: false,
+              animation: 'none',
+            }}
+          />
+          <Stack.Screen 
+            name="History" 
+            component={HistoryScreen}
+            options={{
+              gestureEnabled: false,
+              animation: 'none',
+            }}
+          />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Notification" component={NotificationScreen} />
         </Stack.Navigator>
