@@ -84,7 +84,9 @@ export const RecordForm: React.FC<RecordFormProps> = ({ onComplete }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
   },
   submitButton: {
     backgroundColor: colors.primary,

@@ -37,7 +37,7 @@ export const HomeScreen = () => {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation<RootStackNavigationProp>()
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const snapPoints = useMemo(() => ['50%', '90%'], [])
+  const snapPoints = useMemo(() => ['65%', '90%'], [])
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index)
