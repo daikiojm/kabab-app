@@ -39,7 +39,20 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
       <WebContainer>
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer
+          ref={navigationRef}
+          linking={{
+            prefixes: [],
+            config: {
+              screens: {
+                Home: '',
+                History: 'history',
+                Settings: 'settings',
+                Notification: 'notification',
+              },
+            },
+          }}
+        >
           <StatusBar style="auto" />
           <Stack.Navigator
             initialRouteName="Home"
