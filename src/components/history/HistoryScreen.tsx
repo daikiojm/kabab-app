@@ -6,6 +6,7 @@ import { BottomNavigation } from '../../components/BottomNavigation'
 import { Header } from '../common/Header'
 import { EmptyState } from '../common/EmptyState'
 import { MonthlyGroup } from './MonthlyGroup'
+import { KebabHistoryItem } from './KebabHistoryItem'
 import { useKebabRecords } from '../../hooks/useKebabRecords'
 import { groupByMonth } from '../../utils/date'
 import { colors } from '../../styles/colors'
@@ -40,11 +41,14 @@ export const HistoryScreen = () => {
           ) : (
             <View style={styles.content}>
               {Object.entries(groupedRecords).map(([month, monthRecords]) => (
-                <MonthlyGroup
-                  key={month}
-                  month={month}
-                  records={monthRecords}
-                />
+                <MonthlyGroup key={month} month={month}>
+                  {monthRecords.map((record) => (
+                    <KebabHistoryItem
+                      key={record.id}
+                      record={record}
+                    />
+                  ))}
+                </MonthlyGroup>
               ))}
             </View>
           )}

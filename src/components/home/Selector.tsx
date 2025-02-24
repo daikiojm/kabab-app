@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.background,
+    minWidth: 80,
   },
   optionButtonSelected: {
     backgroundColor: colors.primary,
@@ -81,8 +82,10 @@ const styles = StyleSheet.create({
   optionText: {
     ...typography.body.medium,
     color: colors.text.secondary,
+    textAlign: 'center',
   },
   optionTextSelected: {
     color: colors.background,
+    fontWeight: '600',
   },
 })

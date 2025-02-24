@@ -31,10 +31,10 @@ export const RecordForm: React.FC<RecordFormProps> = ({
   onComplete,
 }) => {
   const { addRecord, updateRecord } = useKebabRecords()
-  const [kebabType, setKebabType] = useState<KebabType | ''>(initialValues?.kebabType || '')
-  const [meatType, setMeatType] = useState<MeatType | ''>(initialValues?.meatType || '')
-  const [sauceType, setSauceType] = useState<SauceType | ''>(initialValues?.sauceType || '')
-  const [size, setSize] = useState<Size | ''>(initialValues?.size || '')
+  const [kebabType, setKebabType] = useState<KebabType | ''>(mode === 'edit' && initialValues ? initialValues.kebabType : '')
+  const [meatType, setMeatType] = useState<MeatType | ''>(mode === 'edit' && initialValues ? initialValues.meatType : '')
+  const [sauceType, setSauceType] = useState<SauceType | ''>(mode === 'edit' && initialValues ? initialValues.sauceType : '')
+  const [size, setSize] = useState<Size | ''>(mode === 'edit' && initialValues ? initialValues.size : '')
 
   const handleSubmit = async () => {
     if (!kebabType || !meatType || !sauceType || !size) {
