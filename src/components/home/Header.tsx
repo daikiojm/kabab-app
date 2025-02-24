@@ -33,6 +33,8 @@ type HeaderProps = {
   emoji?: string
   showBack?: boolean
   onBack?: () => void
+  leftIcon?: string
+  onLeftIconPress?: () => void
   rightIcon?: string
   onRightIconPress?: () => void
   containerStyle?: StyleProp<ViewStyle>
@@ -43,6 +45,8 @@ export const Header: React.FC<HeaderProps> = ({
   emoji,
   showBack = false,
   onBack,
+  leftIcon,
+  onLeftIconPress,
   rightIcon,
   onRightIconPress,
   containerStyle,
@@ -50,6 +54,14 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <View style={[styles.container, containerStyle]}>
       {showBack && <HeaderBackButton onPress={onBack} />}
+      {leftIcon && (
+        <TouchableOpacity
+          style={styles.leftIcon}
+          onPress={onLeftIconPress}
+        >
+          <Text style={styles.iconText}>{leftIcon}</Text>
+        </TouchableOpacity>
+      )}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>
           {emoji && `${emoji} `}{title}
@@ -70,6 +82,12 @@ export const Header: React.FC<HeaderProps> = ({
 }
 
 const styles = StyleSheet.create({
+  leftIcon: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',

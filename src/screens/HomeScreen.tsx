@@ -63,11 +63,11 @@ export const HomeScreen = () => {
         <Header
           title="ケバブ記録"
           emoji="🥙"
+          leftIcon="⚙️"
+          onLeftIconPress={handleNavigateToSettings}
           rightIcon="🔔"
           onRightIconPress={handleNavigateToNotification}
-          onBack={handleNavigateToSettings}
-          showBack
-          containerStyle={{ paddingTop: insets.top + spacing.xxl }}
+          containerStyle={{ paddingTop: insets.top + spacing.xs }}
         />
         <ScrollView style={styles.scrollView}>
           <View style={styles.content}>
