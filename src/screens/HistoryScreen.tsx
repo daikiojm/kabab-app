@@ -39,39 +39,38 @@ export const HistoryScreen = () => {
   }, [])
 
   return (
-    <View style={styles.root}>
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.header}>
-            <Text style={styles.title}>📅 ケバブ履歴</Text>
-          </View>
-
-          {Object.entries(groupedRecords).map(([month, monthRecords]) => (
-            <MonthlyGroup key={month} month={month}>
-              {monthRecords.map((record) => (
-                <KebabHistoryItem
-                  key={record.id}
-                  record={record}
-                  onPress={handleRecordPress}
-                />
-              ))}
-            </MonthlyGroup>
-          ))}
-
-          {records.length === 0 && (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                まだケバブの記録がありません 🥙
-              </Text>
-              <Text style={styles.emptySubText}>
-                ホーム画面から記録を追加してみましょう！
-              </Text>
+    <>
+      <View style={styles.root}>
+        <SafeAreaView style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.header}>
+              <Text style={styles.title}>📅 ケバブ履歴</Text>
             </View>
-          )}
-        </ScrollView>
-      </SafeAreaView>
 
-      <View style={styles.bottomNavigation}>
+            {Object.entries(groupedRecords).map(([month, monthRecords]) => (
+              <MonthlyGroup key={month} month={month}>
+                {monthRecords.map((record) => (
+                  <KebabHistoryItem
+                    key={record.id}
+                    record={record}
+                    onPress={handleRecordPress}
+                  />
+                ))}
+              </MonthlyGroup>
+            ))}
+
+            {records.length === 0 && (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>
+                  まだケバブの記録がありません 🥙
+                </Text>
+                <Text style={styles.emptySubText}>
+                  ホーム画面から記録を追加してみましょう！
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </SafeAreaView>
         <BottomNavigation />
       </View>
 
@@ -79,20 +78,20 @@ export const HistoryScreen = () => {
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
+        enableContentPanningGesture
+        enableOverDrag
         enablePanDownToClose
         handleIndicatorStyle={styles.handleIndicator}
         backgroundStyle={styles.bottomSheetBackground}
-        style={styles.bottomSheet}
         backdropComponent={(props) => (
           <BottomSheetBackdrop
             {...props}
             disappearsOnIndex={-1}
             appearsOnIndex={0}
-            opacity={0.5}
           />
         )}
       >
-        <BottomSheetView>
+        <BottomSheetView style={styles.contentContainer}>
           {selectedRecord && (
             <>
               <Text style={styles.editTitle}>記録を編集</Text>
@@ -111,7 +110,7 @@ export const HistoryScreen = () => {
           )}
         </BottomSheetView>
       </BottomSheet>
-    </View>
+    </>
   )
 }
 
@@ -157,11 +156,8 @@ const styles = StyleSheet.create({
   bottomSheetBackground: {
     backgroundColor: colors.background,
   },
-  bottomSheet: {
-    zIndex: 2,
-  },
-  bottomNavigation: {
-    zIndex: 1,
+  contentContainer: {
+    flex: 1,
   },
   editTitle: {
     ...typography.heading.h2,
