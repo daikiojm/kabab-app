@@ -81,12 +81,8 @@ npm run web
 
 アプリケーションの動作デモと画面イメージは以下を参照してください：
 
-<video width="100%" controls>
-  <source src="docs/kabab-app-demo-2025-02.mp4" type="video/mp4">
-  お使いのブラウザは動画の再生に対応していません。
-</video>
-
 ![アプリケーションのメイン画面](docs/app-screenshot.png)
+  <img src="docs/app-screenshot.png" alt="アプリケーションのメイン画面" height="300" />
 
 ### トップ画面（HomeScreen）
 - メイン機能
