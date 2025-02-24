@@ -1,10 +1,11 @@
 import 'react-native-gesture-handler'
 import 'react-native-reanimated'
-import { NavigationContainer, useNavigationContainerRef, NavigationContainerRefWithCurrent } from '@react-navigation/native'
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect } from 'react'
+import { Platform } from 'react-native'
 import { setNotificationHandler, initializeNotifications } from './src/services/notification'
 import { HomeScreen } from './src/screens/HomeScreen'
 import { HistoryScreen } from './src/screens/HistoryScreen'
@@ -13,23 +14,25 @@ import { NotificationScreen } from './src/screens/NotificationScreen'
 import { RootStackParamList } from './src/types/navigation'
 import { ReminderTimeSheet } from './src/components/settings/ReminderTimeSheet'
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const Stack = createStackNavigator<RootStackParamList>()
 
 export default function App() {
   const navigationRef = useNavigationContainerRef<RootStackParamList>()
 
   useEffect(() => {
-    // 通知の初期設定
-    initializeNotifications()
+    if (Platform.OS !== 'web') {
+      // 通知の初期設定
+      initializeNotifications()
 
-    // 通知タップ時のハンドラー設定
-    setNotificationHandler((response) => {
-      const data = response.notification.request.content.data
+      // 通知タップ時のハンドラー設定
+      setNotificationHandler((response) => {
+        const data = response.notification.request.content.data
 
-      if (data?.type === 'reminder' && data?.action === 'record') {
-        navigationRef.current?.navigate('Home')
-      }
-    })
+        if (data?.type === 'reminder' && data?.action === 'record') {
+          navigationRef.current?.navigate('Home')
+        }
+      })
+    }
   }, [])
 
   return (
@@ -40,7 +43,7 @@ export default function App() {
           initialRouteName="Home"
           screenOptions={{
             headerShown: false,
-            contentStyle: { backgroundColor: '#fff' },
+            cardStyle: { backgroundColor: '#fff' },
           }}
         >
           <Stack.Screen 

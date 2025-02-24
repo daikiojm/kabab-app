@@ -9,8 +9,8 @@
  *
  * @see {@link Header} コンポーネントのドキュメントも参照してください
  */
-import React, { useCallback, useMemo, useRef } from 'react'
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
@@ -31,14 +31,27 @@ export const HomeScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['65%', '90%'], [])
+  const [isWebModalVisible, setIsWebModalVisible] = useState(false)
 
   const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index)
+    if (Platform.OS === 'web') {
+      setIsWebModalVisible(index !== -1)
+    }
   }, [])
 
   const handleOpenPress = useCallback(() => {
-    if (bottomSheetRef.current) {
+    if (Platform.OS === 'web') {
+      setIsWebModalVisible(true)
+    } else if (bottomSheetRef.current) {
       bottomSheetRef.current.snapToIndex(0)
+    }
+  }, [])
+
+  const handleClosePress = useCallback(() => {
+    if (Platform.OS === 'web') {
+      setIsWebModalVisible(false)
+    } else if (bottomSheetRef.current) {
+      bottomSheetRef.current.close()
     }
   }, [])
 
@@ -49,6 +62,19 @@ export const HomeScreen = () => {
   const handleNavigateToNotification = useCallback(() => {
     navigation.navigate('Notification')
   }, [navigation])
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        pressBehavior="close"
+        enableTouchThrough={false}
+      />
+    ),
+    []
+  )
 
   return (
     <>
@@ -88,29 +114,41 @@ export const HomeScreen = () => {
       </View>
       <BottomNavigation />
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        enableContentPanningGesture
-        enableOverDrag
-        enablePanDownToClose
-        handleIndicatorStyle={styles.handleIndicator}
-        backgroundStyle={styles.bottomSheetBackground}
-        onChange={handleSheetChanges}
-        backdropComponent={(props) => (
-          <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
-        )}
-      >
-        <BottomSheetView style={styles.contentContainer}>
-          <RecordForm
-            onComplete={() => {
-              bottomSheetRef.current?.close()
-              navigation.navigate('History')
-            }}
-          />
-        </BottomSheetView>
-      </BottomSheet>
+      {Platform.OS !== 'web' ? (
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          snapPoints={snapPoints}
+          enableContentPanningGesture
+          enableOverDrag
+          enablePanDownToClose
+          handleIndicatorStyle={styles.handleIndicator}
+          backgroundStyle={styles.bottomSheetBackground}
+          onChange={handleSheetChanges}
+          backdropComponent={renderBackdrop}
+          enableHandlePanningGesture
+        >
+          <BottomSheetView style={styles.contentContainer}>
+            <RecordForm
+              onComplete={() => {
+                handleClosePress()
+                navigation.navigate('History')
+              }}
+            />
+          </BottomSheetView>
+        </BottomSheet>
+      ) : (
+        <View style={[styles.webModal, !isWebModalVisible && { display: 'none' }]}>
+          <View style={styles.webModalContent}>
+            <RecordForm
+              onComplete={() => {
+                handleClosePress()
+                navigation.navigate('History')
+              }}
+            />
+          </View>
+        </View>
+      )}
     </>
   )
 }
@@ -145,13 +183,17 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     borderRadius: radius.md,
     elevation: 3,
-    shadowColor: colors.text.primary,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.25)',
+    } : {
+      shadowColor: colors.text.primary,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+    }),
     width: '80%',
     alignSelf: 'center',
   },
@@ -171,4 +213,31 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
   },
+  webModal: Platform.select({
+    web: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000,
+    },
+    default: {},
+  }),
+  webModalContent: Platform.select({
+    web: {
+      backgroundColor: colors.background,
+      borderRadius: radius.lg,
+      padding: spacing.lg,
+      width: '90%',
+      maxWidth: 500,
+      maxHeight: '80%',
+      overflowY: 'scroll',
+    },
+    default: {},
+  }),
 })
