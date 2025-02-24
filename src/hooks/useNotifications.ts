@@ -18,12 +18,9 @@ type ReminderNotificationConfig = {
   }
 }
 
-import { SchedulableTriggerInputTypes } from 'expo-notifications'
+import type { CalendarTriggerInput } from 'expo-notifications'
 
-type ReminderScheduleConfig = {
-  type: SchedulableTriggerInputTypes.CALENDAR
-  hour: number
-  minute: number
+type ReminderScheduleConfig = CalendarTriggerInput & {
   repeats: boolean
 }
 import {
@@ -161,7 +158,6 @@ export const useNotifications = () => {
       }
 
       const schedule: ReminderScheduleConfig = {
-        type: SchedulableTriggerInputTypes.CALENDAR,
         hour: hours,
         minute: minutes,
         repeats: true,
