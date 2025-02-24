@@ -28,7 +28,6 @@ export const KebabTips: React.FC<KebabTipsProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: spacing.md,
     marginBottom: spacing.xl,
   },
 })

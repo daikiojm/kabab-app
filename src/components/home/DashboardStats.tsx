@@ -34,7 +34,6 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: spacing.md,
     marginBottom: spacing.xl,
   },
 })
