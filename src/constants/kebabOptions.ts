@@ -12,15 +12,15 @@ export const kebabTypes: Option<KebabType>[] = [
 ]
 
 export const meatTypes: Option<MeatType>[] = [
-  { label: 'チキン', value: 'chicken', emoji: '🍗' },
+  { label: 'チキン', value: 'chicken', emoji: '🐔' },
   { label: 'ビーフ', value: 'beef', emoji: '🥩' },
   { label: 'ミックス', value: 'mix', emoji: '🍖' },
 ]
 
 export const sauceTypes: Option<SauceType>[] = [
   { label: 'マイルド', value: 'mild', emoji: '😌' },
-  { label: 'ホット', value: 'hot', emoji: '🔥' },
-  { label: 'ミックス', value: 'mix', emoji: '🌶' },
+  { label: 'ホット', value: 'hot', emoji: '🌶️' },
+  { label: 'ミックス', value: 'mix', emoji: '🥫' },
 ]
 
 export const sizes: Option<Size>[] = [
