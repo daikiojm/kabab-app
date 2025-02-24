@@ -81,8 +81,7 @@ npm run web
 
 アプリケーションの動作デモと画面イメージは以下を参照してください：
 
-![アプリケーションのメイン画面](docs/app-screenshot.png)
-  <img src="docs/app-screenshot.png" alt="アプリケーションのメイン画面" height="300" />
+<img src="docs/app-screenshot.png" alt="アプリケーションのメイン画面" height="400" />
 
 ### トップ画面（HomeScreen）
 - メイン機能
