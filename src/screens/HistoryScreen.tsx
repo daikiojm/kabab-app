@@ -16,7 +16,7 @@ import { KebabRecord } from '../types/record'
 
 export const HistoryScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>()
-  const { records } = useKebabRecords()
+  const { records, loadRecords } = useKebabRecords()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [selectedRecord, setSelectedRecord] = useState<KebabRecord | null>(null)
   const snapPoints = useMemo(() => ['65%', '90%'], [])
@@ -36,7 +36,8 @@ export const HistoryScreen = () => {
   const handleEditComplete = useCallback(() => {
     bottomSheetRef.current?.close()
     setSelectedRecord(null)
-  }, [])
+    loadRecords()
+  }, [loadRecords])
 
   return (
     <>

@@ -26,7 +26,7 @@ import { colors } from '../styles/colors'
 import { typography } from '../styles/typography'
 
 export const HomeScreen = () => {
-  const { stats } = useKebabRecords()
+  const { stats, loadRecords } = useKebabRecords()
   const insets = useSafeAreaInsets()
   const navigation = useNavigation<RootStackNavigationProp>()
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -103,7 +103,12 @@ export const HomeScreen = () => {
         )}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <RecordForm onComplete={() => bottomSheetRef.current?.close()} />
+          <RecordForm
+            onComplete={() => {
+              bottomSheetRef.current?.close()
+              navigation.navigate('History')
+            }}
+          />
         </BottomSheetView>
       </BottomSheet>
     </>
