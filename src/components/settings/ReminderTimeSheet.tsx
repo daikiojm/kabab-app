@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/botto
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Button } from '@rneui/themed'
 import { reminderTimeSchema } from '../../schemas/reminder'
+import { colors } from '../../styles/colors'
 
 interface ReminderTimeSheetProps {
   isVisible: boolean
@@ -26,7 +27,7 @@ export const ReminderTimeSheet: React.FC<ReminderTimeSheetProps> = ({
     return date
   })
 
-  const snapPoints = useMemo(() => ['50%'], [])
+  const snapPoints = useMemo(() => ['65%'], [])
 
   const handleTimeChange = useCallback((event: any, date?: Date) => {
     if (date) {
@@ -105,11 +106,14 @@ export const ReminderTimeSheet: React.FC<ReminderTimeSheetProps> = ({
             type="outline"
             onPress={onClose}
             containerStyle={styles.buttonWrapper}
+            buttonStyle={styles.outlineButton}
+            titleStyle={{ color: colors.primary }}
           />
           <Button
             title="設定"
             onPress={handleSubmit}
             containerStyle={styles.buttonWrapper}
+            buttonStyle={styles.primaryButton}
           />
         </View>
       </View>
@@ -151,10 +155,21 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    marginTop: 24,
+    marginBottom: 16,
   },
   buttonWrapper: {
     flex: 1,
     marginHorizontal: 8,
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+  },
+  outlineButton: {
+    borderColor: colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
   },
 })

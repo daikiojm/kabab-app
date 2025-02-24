@@ -34,20 +34,14 @@ export const useNotifications = () => {
       const settings = settingsJson ? JSON.parse(settingsJson) : { enabled: false }
       const reminder = reminderJson ? JSON.parse(reminderJson) : DEFAULT_REMINDER_SETTINGS
 
+      // 既存の通知設定を読み込むのみ
+
       setState((prev: NotificationState) => ({
         ...prev,
         notifications,
         enabled: settings.enabled,
         reminder,
       }))
-
-      // 通知の初期化
-      initializeNotifications()
-
-      // リマインダーが有効な場合は再スケジュール
-      if (reminder.enabled && reminder.time) {
-        await scheduleReminderNotification(reminder.time)
-      }
     } catch (e) {
       console.error('Error loading notifications:', e)
     }
@@ -154,33 +148,29 @@ export const useNotifications = () => {
         }
       }
 
-      // 通知設定を保存
-      await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify({ enabled }))
-
-      // リマインダー設定も含めて状態を更新
       const currentReminder = state.reminder
-      setState((prev: NotificationState) => ({
-        ...prev,
-        enabled,
-        reminder: {
-          ...currentReminder,
-          enabled: enabled ? currentReminder.enabled : false,
-        },
-      }))
-
-      // リマインダー設定も更新
       const updatedReminder = {
         ...currentReminder,
         enabled: enabled ? currentReminder.enabled : false,
       }
-      await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
 
-      // 通知が有効化され、リマインダーも有効な場合はスケジュール
+      // 通知のスケジュール更新
       if (enabled && currentReminder.enabled) {
         await scheduleReminderNotification(currentReminder.time)
       } else if (!enabled && currentReminder.notificationId) {
         await cancelNotification(currentReminder.notificationId)
       }
+
+      // 通知設定を保存
+      await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify({ enabled }))
+      await AsyncStorage.setItem(REMINDER_SETTINGS_KEY, JSON.stringify(updatedReminder))
+
+      // 状態を更新
+      setState((prev: NotificationState) => ({
+        ...prev,
+        enabled,
+        reminder: updatedReminder,
+      }))
     } catch (e) {
       console.error('Error toggling notifications:', e)
     }
@@ -197,7 +187,13 @@ export const useNotifications = () => {
       const updatedReminder = {
         ...state.reminder,
         enabled,
-        notificationId: undefined,
+      }
+
+      // 通知のスケジュール更新
+      if (enabled) {
+        await scheduleReminderNotification(updatedReminder.time)
+      } else if (state.reminder.notificationId) {
+        await cancelNotification(state.reminder.notificationId)
       }
 
       // リマインダー設定を保存
@@ -208,13 +204,6 @@ export const useNotifications = () => {
         ...prev,
         reminder: updatedReminder,
       }))
-
-      // 通知のスケジュール更新
-      if (enabled) {
-        await scheduleReminderNotification(updatedReminder.time)
-      } else if (state.reminder.notificationId) {
-        await cancelNotification(state.reminder.notificationId)
-      }
     } catch (e) {
       console.error('Error toggling reminder:', e)
       Alert.alert('エラー', 'リマインダーの設定に失敗しました')
@@ -226,7 +215,11 @@ export const useNotifications = () => {
       const updatedReminder = {
         ...state.reminder,
         time,
-        notificationId: undefined,
+      }
+
+      // 通知が有効な場合は再スケジュール
+      if (state.enabled && updatedReminder.enabled) {
+        await scheduleReminderNotification(time)
       }
 
       // リマインダー設定を保存
@@ -237,11 +230,6 @@ export const useNotifications = () => {
         ...prev,
         reminder: updatedReminder,
       }))
-
-      // 通知が有効な場合は再スケジュール
-      if (state.enabled && updatedReminder.enabled) {
-        await scheduleReminderNotification(time)
-      }
     } catch (e) {
       console.error('Error updating reminder time:', e)
     }
