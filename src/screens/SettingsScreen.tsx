@@ -84,6 +84,26 @@ export const SettingsScreen = () => {
             <Text style={styles.dangerButtonText}>履歴をリセット</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>アプリ情報</Text>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>アプリ名</Text>
+            <Text style={styles.infoValue}>kabab-app</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>バージョン</Text>
+            <Text style={styles.infoValue}>1.0.0</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>フレームワーク</Text>
+            <Text style={styles.infoValue}>React Native (Expo)</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Node.js</Text>
+            <Text style={styles.infoValue}>v22.14.0</Text>
+          </View>
+        </View>
       </View>
       <ReminderTimeSheet
         isVisible={isTimeSheetVisible}
@@ -159,5 +179,21 @@ const styles = StyleSheet.create({
     color: '#ff4444',
     fontSize: 16,
     fontWeight: '600',
+  },
+  infoItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  infoLabel: {
+    fontSize: 16,
+    color: '#666',
+  },
+  infoValue: {
+    fontSize: 16,
+    fontWeight: '500',
   },
 })
