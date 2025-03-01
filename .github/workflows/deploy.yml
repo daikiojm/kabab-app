@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# GitHub Actionsに書き込み権限を付与
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
