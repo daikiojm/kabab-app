@@ -10,20 +10,20 @@ module.exports = async function (env, argv) {
     mode: 'production',
     platform: 'web',
     web: {
-      publicPath: '/kabab-app/',
+      // publicPath: '/kabab-app/',
       bundler: 'webpack',
     },
   }
 
   // Add homepage for GitHub Pages
-  env.homepage = '/kabab-app'
+  // env.homepage = '/kabab-app'
 
   const config = await createExpoWebpackConfigAsync(env, argv)
 
   // Set base path for all assets
   config.output = {
     ...config.output,
-    publicPath: '/kabab-app/',
+    // publicPath: '/kabab-app/',
   }
 
   // Configure HTML webpack plugin
@@ -59,7 +59,7 @@ module.exports = async function (env, argv) {
     }
   }
 
-  config.plugins.push(new AssetPathModifierPlugin())
+  // config.plugins.push(new AssetPathModifierPlugin())
 
   // Polyfill for crypto module
   config.resolve = {
