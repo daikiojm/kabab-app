@@ -49,6 +49,7 @@
     "@types/react": "~18.2.45",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "copy-webpack-plugin": "^13.0.0",
     "crypto-browserify": "^3.12.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",

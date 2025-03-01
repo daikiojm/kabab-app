@@ -41,9 +41,8 @@ export default function App() {
         <NavigationContainer
           ref={navigationRef}
           linking={{
-            prefixes: ['/kabab-app'],
+            prefixes: ['https://daikiojm.github.io/kabab-app'],
             config: {
-              initialRouteName: 'Home',
               screens: {
                 Home: '',
                 History: 'history',
@@ -52,6 +51,17 @@ export default function App() {
               },
             },
             enabled: true,
+            getInitialURL: () => {
+              if (Platform.OS !== 'web') return undefined;
+              // GitHub Pages でのルーティング対応
+              const path = window.location.pathname;
+              const baseUrl = '/kabab-app';
+              if (path.startsWith(baseUrl)) {
+                const route = path.slice(baseUrl.length) || '/';
+                return `https://daikiojm.github.io${route}`;
+              }
+              return undefined;
+            }
           }}
         >
           <StatusBar style="auto" />

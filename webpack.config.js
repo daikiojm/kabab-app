@@ -28,7 +28,20 @@ module.exports = async function (env, argv) {
 
   // Configure HTML webpack plugin
   const HtmlWebpackPlugin = require('html-webpack-plugin')
+  const CopyWebpackPlugin = require('copy-webpack-plugin')
   const path = require('path')
+
+  // Copy 404.html from src/web to web-build
+  config.plugins.push(
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/web/404.html'),
+          to: path.resolve(__dirname, 'web-build/404.html'),
+        },
+      ],
+    })
+  )
 
   // Add a custom plugin to modify HTML content
   class AssetPathModifierPlugin {
