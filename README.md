@@ -138,6 +138,7 @@ npm run deploy
 ```
 
 このコマンドは以下の処理を実行します：
+
 1. `expo export:web` で Web 版をビルド（web-build ディレクトリに出力）
 2. `gh-pages` パッケージを使用して GitHub Pages にデプロイ
 
