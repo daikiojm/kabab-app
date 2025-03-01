@@ -25,7 +25,8 @@
       "favicon": "./assets/favicon.png",
       "build": {
         "publicPath": "/kabab-app/"
-      }
+      },
+      "homepage": "/kabab-app"
     }
   }
 }

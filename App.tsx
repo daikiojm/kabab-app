@@ -41,7 +41,7 @@ export default function App() {
         <NavigationContainer
           ref={navigationRef}
           linking={{
-            prefixes: ['https://daikiojm.github.io/kabab-app'],
+            prefixes: ['/kabab-app'],
             config: {
               initialRouteName: 'Home',
               screens: {
@@ -51,6 +51,7 @@ export default function App() {
                 Notification: 'notification',
               },
             },
+            enabled: true
           }}
         >
           <StatusBar style="auto" />
