@@ -5,12 +5,10 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -24,11 +22,11 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build website
-        run: npm run build:web
+        run: npm run predeploy
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web-build
-          allow_empty_commit: true
+          force_orphan: true

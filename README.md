@@ -133,12 +133,13 @@ npm run web
 ローカルから手動でデプロイする場合は以下のコマンドを実行します：
 
 ```bash
-# Web 版のビルド
-npm run build:web
-
-# GitHub Pages へデプロイ
+# Web 版のビルドとデプロイを実行
 npm run deploy
 ```
+
+このコマンドは以下の処理を実行します：
+1. `expo export:web` で Web 版をビルド（web-build ディレクトリに出力）
+2. `gh-pages` パッケージを使用して GitHub Pages にデプロイ
 
 ## 開発ステータス
 
