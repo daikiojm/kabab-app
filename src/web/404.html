@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Redirecting...</title>
-    <script>
-      // GitHub Pages での SPA ルーティング対応
-      (function(){
-        const path = window.location.pathname;
-        const baseUrl = '/kabab-app';
-        
-        // ベースパスで始まらないパスの場合、ベースパスを追加してリダイレクト
-        if (!path.startsWith(baseUrl)) {
-          window.location.replace(baseUrl + path);
-        } else {
-          // ベースパスで始まる場合は index.html にリダイレクト
-          window.location.replace(baseUrl + '/index.html');
-        }
-      })();
-    </script>
-  </head>
-  <body>
-    Redirecting...
-  </body>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // GitHub Pages での SPA ルーティング対応
+    (function(){
+      // サブディレクトリに配置するので1を指定
+      const SEGMENT_COUNT = 1;
+
+      const loc = window.location;
+      const origin = loc.origin;
+      const path = loc.href.substr(origin.length + 1);
+      const segments = path.split('/');
+      const repo = segments.slice(0, SEGMENT_COUNT).join('/');
+      const param = segments.slice(SEGMENT_COUNT).join('/');
+      const url = origin + '/' + repo + '?p=' + encodeURIComponent(param);
+      loc.replace(url);
+    })();
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
 </html>

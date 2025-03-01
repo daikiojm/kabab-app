@@ -52,16 +52,24 @@ export default function App() {
             },
             enabled: true,
             getInitialURL: () => {
-              if (Platform.OS !== 'web') return undefined;
-              // GitHub Pages でのルーティング対応
-              const path = window.location.pathname;
-              const baseUrl = '/kabab-app';
-              if (path.startsWith(baseUrl)) {
-                const route = path.slice(baseUrl.length) || '/';
-                return `https://daikiojm.github.io${route}`;
+              if (Platform.OS !== 'web') return undefined
+
+              // GitHub Pages での SPA ルーティング対応
+              const query = window.location.search
+              if (query.startsWith('?p=')) {
+                const route = decodeURIComponent(query.substr(3))
+                window.history.replaceState({}, '', '/kabab-app/' + route)
+                return `https://daikiojm.github.io/kabab-app/${route}`
               }
-              return undefined;
-            }
+
+              const path = window.location.pathname
+              const baseUrl = '/kabab-app'
+              if (path.startsWith(baseUrl)) {
+                const route = path.slice(baseUrl.length) || '/'
+                return `https://daikiojm.github.io/kabab-app${route}`
+              }
+              return undefined
+            },
           }}
         >
           <StatusBar style="auto" />
