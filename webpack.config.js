@@ -10,7 +10,7 @@ module.exports = async function (env, argv) {
     mode: 'production',
     platform: 'web',
     web: {
-      // publicPath: '/kabab-app/',
+      publicPath: '/kabab-app/',
       bundler: 'webpack',
     },
   }
