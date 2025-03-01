@@ -10,7 +10,7 @@ module.exports = async function (env, argv) {
     mode: 'production',
     platform: 'web',
     web: {
-      publicPath: '/kabab-app/',
+      publicPath: './',
       bundler: 'webpack',
     },
   }
@@ -23,7 +23,7 @@ module.exports = async function (env, argv) {
   // Set base path for all assets
   config.output = {
     ...config.output,
-    // publicPath: '/kabab-app/',
+    publicPath: './',
   }
 
   // Configure HTML webpack plugin
@@ -51,7 +51,7 @@ module.exports = async function (env, argv) {
           'AssetPathModifierPlugin',
           (data, cb) => {
             // Replace all asset paths with the correct base path
-            data.html = data.html.replace(/(href|src)="\/(?!kabab-app\/)/g, '$1="/kabab-app/')
+            data.html = data.html.replace(/(href|src)="\/(?!kabab-app\/)/g, '$1="./')
             cb(null, data)
           }
         )
@@ -59,7 +59,7 @@ module.exports = async function (env, argv) {
     }
   }
 
-  // config.plugins.push(new AssetPathModifierPlugin())
+  config.plugins.push(new AssetPathModifierPlugin())
 
   // Polyfill for crypto module
   config.resolve = {
