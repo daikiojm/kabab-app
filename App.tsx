@@ -51,7 +51,7 @@ export default function App() {
                 Notification: 'notification',
               },
             },
-            enabled: true
+            enabled: true,
           }}
         >
           <StatusBar style="auto" />
