@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { Platform, StyleSheet } from 'react-native'
 import { WebContainer } from '../src/components/common/WebContainer'
 import { setNotificationHandler, initializeNotifications } from '../src/services/notification'
-import { Slot, useRouter, useSegments } from 'expo-router'
+import { Slot, useRouter } from 'expo-router'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 
 const MyTheme = {
@@ -24,7 +24,7 @@ const MyTheme = {
 
 export default function RootLayout() {
   const router = useRouter()
-  const segments = useSegments()
+  // 将来的にセグメント情報が必要になった場合はここでuseSegmentsを使用
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
