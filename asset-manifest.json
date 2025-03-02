@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.js": "/static/js/main.8db2a837.js",
-    "static/js/535.feee9d74.js": "/static/js/535.feee9d74.js",
-    "favicon.ico": "/favicon.ico",
-    "index.html": "/index.html",
-    "static/media/rocket.png": "/static/media/rocket.d2f3bf41d5e4515c39a9.png",
-    "static/media/bell.png": "/static/media/bell.cf04af27d6a651c4b904.png",
-    "static/media/star.png": "/static/media/star.69c7138684828d68fe5a.png",
-    "static/media/heart.png": "/static/media/heart.23b5c2c0eb77d50ff1b4.png",
-    "favicon-32.png": "/favicon-32.png",
-    "favicon-16.png": "/favicon-16.png",
-    "manifest.json": "/manifest.json",
-    "serve.json": "/serve.json",
-    "main.8db2a837.js.map": "/static/js/main.8db2a837.js.map",
-    "535.feee9d74.js.map": "/static/js/535.feee9d74.js.map"
+    "main.js": "/kabab-app/static/js/main.8db2a837.js",
+    "static/js/535.e5dfd1c5.js": "/kabab-app/static/js/535.e5dfd1c5.js",
+    "favicon.ico": "/kabab-app/favicon.ico",
+    "index.html": "/kabab-app/index.html",
+    "static/media/rocket.png": "/kabab-app/static/media/rocket.d2f3bf41d5e4515c39a9.png",
+    "static/media/bell.png": "/kabab-app/static/media/bell.cf04af27d6a651c4b904.png",
+    "static/media/star.png": "/kabab-app/static/media/star.69c7138684828d68fe5a.png",
+    "static/media/heart.png": "/kabab-app/static/media/heart.23b5c2c0eb77d50ff1b4.png",
+    "favicon-32.png": "/kabab-app/favicon-32.png",
+    "favicon-16.png": "/kabab-app/favicon-16.png",
+    "manifest.json": "/kabab-app/manifest.json",
+    "serve.json": "/kabab-app/serve.json",
+    "main.8db2a837.js.map": "/kabab-app/static/js/main.8db2a837.js.map",
+    "535.e5dfd1c5.js.map": "/kabab-app/static/js/535.e5dfd1c5.js.map"
   },
   "entrypoints": [
-    "static/js/535.feee9d74.js",
+    "static/js/535.e5dfd1c5.js",
     "static/js/main.8db2a837.js"
   ]
 }
