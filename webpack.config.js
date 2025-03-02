@@ -10,7 +10,7 @@ module.exports = async function (env, argv) {
     mode: 'production',
     platform: 'web',
     web: {
-      publicPath: './kabab-app/',
+      // publicPath: './kabab-app/',
       bundler: 'webpack',
     },
   }
@@ -23,7 +23,7 @@ module.exports = async function (env, argv) {
   // Set base path for all assets
   config.output = {
     ...config.output,
-    publicPath: './kabab-app/',
+    // publicPath: './kabab-app/',
   }
 
   // Configure HTML webpack plugin
