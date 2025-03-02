@@ -10,7 +10,7 @@ module.exports = async function (env, argv) {
     mode: 'production',
     platform: 'web',
     web: {
-      // publicPath: './kabab-app/',
+      publicPath: './kabab-app/',
       bundler: 'webpack',
     },
   }
@@ -23,7 +23,7 @@ module.exports = async function (env, argv) {
   // Set base path for all assets
   config.output = {
     ...config.output,
-    // publicPath: './kabab-app/',
+    publicPath: './kabab-app/',
   }
 
   // Configure HTML webpack plugin
@@ -32,16 +32,16 @@ module.exports = async function (env, argv) {
   const path = require('path')
 
   // Copy 404.html from src/web to web-build
-  // config.plugins.push(
-  //   new CopyWebpackPlugin({
-  //     patterns: [
-  //       {
-  //         from: path.resolve(__dirname, 'src/web/404.html'),
-  //         to: path.resolve(__dirname, 'web-build/404.html'),
-  //       },
-  //     ],
-  //   })
-  // )
+  config.plugins.push(
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/web/404.html'),
+          to: path.resolve(__dirname, 'web-build/404.html'),
+        },
+      ],
+    })
+  )
 
   // Add a custom plugin to modify HTML content
   class AssetPathModifierPlugin {
