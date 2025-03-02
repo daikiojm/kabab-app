@@ -12,9 +12,8 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
-import { RootStackNavigationProp } from '../types/navigation'
+import { useTypedRouter } from '../types/navigation'
 import { BottomNavigation } from '../components/BottomNavigation'
 import { Header } from '../components/home/Header'
 import { DashboardStats } from '../components/home/DashboardStats'
@@ -28,7 +27,7 @@ import { typography } from '../styles/typography'
 export const HomeScreen = () => {
   const { stats } = useKebabRecords()
   const insets = useSafeAreaInsets()
-  const navigation = useNavigation<RootStackNavigationProp>()
+  const router = useTypedRouter()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['65%', '90%'], [])
   const handleOpenPress = useCallback(() => {
@@ -40,12 +39,12 @@ export const HomeScreen = () => {
   }, [])
 
   const handleNavigateToSettings = useCallback(() => {
-    navigation.navigate('Settings')
-  }, [navigation])
+    router.navigate('/settings')
+  }, [router])
 
   const handleNavigateToNotification = useCallback(() => {
-    navigation.navigate('Notification')
-  }, [navigation])
+    router.navigate('/notification')
+  }, [router])
 
   return (
     <>
@@ -103,7 +102,7 @@ export const HomeScreen = () => {
           <RecordForm
             onComplete={() => {
               handleClosePress()
-              navigation.navigate('History')
+              router.navigate('/history')
             }}
           />
         </BottomSheetView>

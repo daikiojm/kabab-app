@@ -1,24 +1,24 @@
 import React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { RootStackNavigationProp } from '../types/navigation'
+import { usePathname } from 'expo-router'
+import { useTypedRouter } from '../types/navigation'
 
 export const BottomNavigation = () => {
-  const navigation = useNavigation<RootStackNavigationProp>()
-  const route = useRoute()
+  const router = useTypedRouter()
+  const pathname = usePathname()
 
-  const isActive = (screenName: string) => route.name === screenName
+  const isActive = (path: string) => pathname === path
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('Home')}>
-        <Text style={[styles.icon, isActive('Home') && styles.activeIcon]}>🥙</Text>
-        <Text style={[styles.label, isActive('Home') && styles.activeLabel]}>記録</Text>
+      <TouchableOpacity style={styles.tab} onPress={() => router.navigate('/')}>
+        <Text style={[styles.icon, isActive('/') && styles.activeIcon]}>🥙</Text>
+        <Text style={[styles.label, isActive('/') && styles.activeLabel]}>記録</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('History')}>
-        <Text style={[styles.icon, isActive('History') && styles.activeIcon]}>📅</Text>
-        <Text style={[styles.label, isActive('History') && styles.activeLabel]}>履歴</Text>
+      <TouchableOpacity style={styles.tab} onPress={() => router.navigate('/history')}>
+        <Text style={[styles.icon, isActive('/history') && styles.activeIcon]}>📅</Text>
+        <Text style={[styles.label, isActive('/history') && styles.activeLabel]}>履歴</Text>
       </TouchableOpacity>
     </View>
   )

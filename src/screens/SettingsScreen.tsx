@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, SafeAreaView } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import { HeaderBackButton } from '@react-navigation/elements'
-import { RootStackNavigationProp } from '../types/navigation'
+import { useTypedRouter } from '../types/navigation'
 import { useKebabRecords } from '../hooks/useKebabRecords'
 import { useNotifications } from '../hooks/useNotifications'
 import { ReminderTimeSheet } from '../components/settings/ReminderTimeSheet'
 import { colors } from '../styles/colors'
 
 export const SettingsScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>()
+  const router = useTypedRouter()
   const { clearRecords } = useKebabRecords()
   const {
     enabled: notificationsEnabled,
@@ -65,7 +64,7 @@ export const SettingsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <HeaderBackButton onPress={() => navigation.goBack()} />
+        <HeaderBackButton onPress={() => router.back()} />
         <Text style={styles.title}>⚙️ 設定</Text>
       </View>
       <View style={styles.content}>

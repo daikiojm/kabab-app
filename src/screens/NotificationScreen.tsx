@@ -1,15 +1,14 @@
 import React, { useCallback } from 'react'
 import { View, Text, StyleSheet, FlatList, SafeAreaView, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
 import { HeaderBackButton } from '@react-navigation/elements'
-import { RootStackNavigationProp } from '../types/navigation'
+import { useTypedRouter } from '../types/navigation'
 import { useNotifications } from '../hooks/useNotifications'
 import { formatDate, formatTime } from '../utils/date'
 import { Notification } from '../types/notification'
 import { colors } from '../styles/colors'
 
 export const NotificationScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>()
+  const router = useTypedRouter()
   const { notifications, markAsRead } = useNotifications()
 
   const handleNotificationPress = useCallback(
@@ -45,7 +44,7 @@ export const NotificationScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <HeaderBackButton onPress={() => navigation.goBack()} />
+        <HeaderBackButton onPress={() => router.back()} />
         <Text style={styles.screenTitle}>🔔 通知</Text>
       </View>
       <View style={styles.content}>
