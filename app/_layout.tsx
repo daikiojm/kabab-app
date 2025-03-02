@@ -23,6 +23,7 @@ const MyTheme = {
 }
 
 export default function RootLayout() {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const router = useRouter()
   // 将来的にセグメント情報が必要になった場合はここでuseSegmentsを使用
 
@@ -36,6 +37,7 @@ export default function RootLayout() {
         const data = response.notification.request.content.data
 
         if (data?.type === 'reminder' && data?.action === 'record') {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           router.replace('/')
         }
       })

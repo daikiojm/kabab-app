@@ -12,6 +12,7 @@ export type RootStackNavigationProp = NativeStackNavigationProp<RootStackParamLi
 
 // expo-routerのuseRouterをラップして型安全にする
 export function useTypedRouter() {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   return useRouter() as unknown as {
     push: (href: keyof RootStackParamList) => void
     replace: (href: keyof RootStackParamList) => void
