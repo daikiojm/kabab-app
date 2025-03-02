@@ -6,7 +6,7 @@
 
 - React Native (Expo)
 - TypeScript
-- React Navigation
+- Expo Router
 - AsyncStorage
 - React Native Elements (@rneui/base, @rneui/themed)
 - React Native Bottom Sheet (@gorhom/bottom-sheet)

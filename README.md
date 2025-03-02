@@ -25,6 +25,16 @@ https://github.com/user-attachments/assets/5dd8fdaa-2cdb-4f95-84d2-d965fcd8450d
   - Android SDK
   - Android Emulator
 
+## 技術スタック
+
+- React Native (Expo)
+- TypeScript
+- Expo Router（ルーティングとナビゲーション）
+- AsyncStorage（ローカルデータ保存）
+- React Native Elements（UIコンポーネント）
+- React Native Bottom Sheet（ボトムシートUI）
+- Zod（フォームバリデーション）
+
 ## 開発環境のセットアップ
 
 1. 必要な依存関係をインストール
@@ -139,7 +149,7 @@ npm run deploy
 
 このコマンドは以下の処理を実行します：
 
-1. `expo export:web` で Web 版をビルド（web-build ディレクトリに出力）
+1. `expo export --platform web` で Web 版をビルド（dist ディレクトリに出力）
 2. `gh-pages` パッケージを使用して GitHub Pages にデプロイ
 
 ## 開発ステータス
@@ -148,6 +158,7 @@ npm run deploy
 
 - [x] プロジェクトの初期セットアップ
 - [x] 基本的なナビゲーション構造
+- [x] React NavigationからExpo Routerへの移行
 - [x] 画面レイアウトの実装
   - [x] ホーム画面（HomeScreen）
   - [x] 履歴画面（HistoryScreen）
@@ -166,6 +177,9 @@ npm run deploy
   - [x] リマインダー通知
   - [x] 記録追加通知
   - [x] 通知履歴管理
+- [x] Web対応
+  - [x] 静的レンダリングの実装（SEO対応）
+  - [x] GitHub Pagesへのデプロイ設定
 
 ### 今後の予定
 
